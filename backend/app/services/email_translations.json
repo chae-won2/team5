@@ -23,7 +23,8 @@
     "departure": "출발 {time} (한국시간)",
     "next_day": "익일 {time}",
     "hours": "{n}시간",
-    "minutes": "{n}분"
+    "minutes": "{n}분",
+    "romanized_name": "로마자 표기 (자동)"
   },
   "en": {
     "subject": "Busan Full Course · Your walking route",
@@ -49,7 +50,8 @@
     "departure": "Departure {time} (Korea time)",
     "next_day": "Next day {time}",
     "hours": "{n} hr",
-    "minutes": "{n} min"
+    "minutes": "{n} min",
+    "romanized_name": "Romanized name (automatic)"
   },
   "ja": {
     "subject": "BUSAN FULL COURSE · あなたの徒歩コース",
@@ -75,7 +77,8 @@
     "departure": "出発 {time}（韓国時間）",
     "next_day": "翌日 {time}",
     "hours": "{n}時間",
-    "minutes": "{n}分"
+    "minutes": "{n}分",
+    "romanized_name": "ローマ字表記（自動）"
   },
   "zh-TW": {
     "subject": "BUSAN FULL COURSE · 您的步行路線",
@@ -101,6 +104,7 @@
     "departure": "出發 {time}（韓國時間）",
     "next_day": "翌日 {time}",
     "hours": "{n}小時",
-    "minutes": "{n}分鐘"
+    "minutes": "{n}分鐘",
+    "romanized_name": "羅馬字標示（自動）"
   }
 }

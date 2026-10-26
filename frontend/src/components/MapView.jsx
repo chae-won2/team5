@@ -1,3 +1,4 @@
+import PlaceNameSupplement from "./PlaceNameSupplement";
 import { useI18n } from "../i18n.js";
 import { useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Polyline, ZoomControl, useMap, useMapEvents } from "react-leaflet";
@@ -75,6 +76,7 @@ export default function MapView({ stops, returnLeg, startPoint, onPickStart, tot
           <Marker key={stop.id} position={[stop.lat, stop.lon]} icon={numberedIcon(stop.order)}>
             <Popup>
               <strong>{stop.order}. {stop.name}</strong><br />
+              <PlaceNameSupplement place={stop} className="stop-official-name" />
               {t(stop.category)} · {stop.address}<br />
               {t("previousWalk", { time: approx(stop.leg_minutes) })}
             </Popup>

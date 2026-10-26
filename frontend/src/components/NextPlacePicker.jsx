@@ -1,3 +1,4 @@
+import PlaceNameSupplement from "./PlaceNameSupplement";
 import { paymentTagKey } from "../locale.js";
 import EstimatedSpend from "./EstimatedSpend";
 import { useI18n } from "../i18n.js";
@@ -36,7 +37,7 @@ export default function NextPlacePicker({ categories, selectedCategories, active
     <div className="next-category-tabs">{categories.map((category) => <button key={category} type="button" className={selectedCategories.includes(category) ? "trip-category-selected" : undefined} aria-pressed={activeCategory === category} disabled={busy} onClick={() => onCategory(category)}>{t(category)}</button>)}</div>
     <div ref={listRef} aria-live="polite" aria-busy={busy}>
       {busy ? <p className="source-note">{t("findingNext")}</p> : activeCategory && (candidates.length ? <ul className="alt-list next-candidates">{candidates.map((place) => <li key={place.id}><button type="button" onClick={() => onSelect(place)}>
-        <span className="result-name">{place.name}</span>{place.official_name && <span className="result-official-name">{place.official_name}</span>}<span className="result-address">{place.address}</span>
+        <span className="result-name">{place.name}</span><PlaceNameSupplement place={place} className="result-official-name" /><span className="result-address">{place.address}</span>
         <span className="result-address">{stops.length ? t("fromLastStop") : t("start")}: {walkTime(place.leg_minutes)} · {stayTime(place.duration_min)}</span>
         <EstimatedSpend amount={place.estimated_spend} />
         <span className="result-address">{t("afterAdding", { time: approx(place.projected_total_minutes) })}</span>

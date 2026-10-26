@@ -13,7 +13,7 @@ from urllib.parse import urlencode
 from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
-from app.services.place_labels import official_labels
+from app.services.place_labels import official_labels, romanized_name
 
 load_dotenv()
 
@@ -118,6 +118,8 @@ def build_email_body(req: EmailRequest) -> str:
         lines.append(f"{stop.order}. {display_name}{visit_window} ({category})")
         if display_name != stop.name:
             lines.append(f"   {text['native_name']}: {stop.name}")
+        if req.language != "ko" and not official.get("name") and (reading := romanized_name(stop.name)):
+            lines.append(f"   {text['romanized_name']}: {reading}")
         lines.append(f"   {text['address']}: {display_address}")
         if display_address != stop.address:
             lines.append(f"   {text['native_address']}: {stop.address}")

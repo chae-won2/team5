@@ -6,7 +6,7 @@ from app.services.geo import haversine_m
 from app.services.walking import walking_leg
 from app.services.exposure import rotate
 from app.services.opening_hours import status_at
-from app.services.place_labels import official_labels
+from app.services.place_labels import official_labels, romanized_name
 
 CATEGORIES = ["식당", "카페·디저트", "관광명소", "쇼핑"]
 WALK_SPEED_MPS = 4.5 * 1000 / 3600
@@ -78,6 +78,9 @@ def _place_fields(stop, opening=None, language=None):
         "id": stop["id"],
         "name": stop["name"],
         "official_name": official.get("name", ""),
+        "official_names": {lang: labels["name"] for lang in ("en", "ja", "zh-TW")
+                           if (labels := official_labels(stop["id"], stop["name"], stop["address"], lang)).get("name")},
+        "romanized_name": romanized_name(stop["name"]),
         "category": "카페/디저트" if stop["category"] == "카페·디저트" else stop["category"],
         "address": stop["address"],
         "lon": stop["lon"],

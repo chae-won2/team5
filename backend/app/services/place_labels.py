@@ -1,4 +1,8 @@
-"""Use reviewed official names and addresses; unknown translations stay Korean."""
+"""Reviewed official labels and separately identified automatic reading aids."""
+from functools import lru_cache
+from unicodedata import normalize
+from koroman import romanize
+
 import json
 import re
 from pathlib import Path
@@ -20,3 +24,13 @@ def official_labels(place_id, name, address, language):
     if len(matches) != 1:
         return {}
     return matches[0]["translations"].get(language, {})
+
+
+@lru_cache(maxsize=4096)
+def romanized_name(name):
+    """Reading aid, not an official or translated business name."""
+    name = normalize("NFC", name)
+    if not re.search(r"[가-힣]", name):
+        return ""
+    # Convert Hangul runs only so existing Latin brand names and punctuation survive.
+    return re.sub(r"[가-힣]+", lambda m: romanize(m[0], casing_option="capitalize-word"), name)

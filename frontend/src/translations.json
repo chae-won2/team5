@@ -150,7 +150,8 @@
     "completionTimeBasis": "코스를 완성한 시각 기준",
     "nextDayTime": "익일 {time}",
     "openNow": "영업중",
-    "closedNow": "영업시간 아님"
+    "closedNow": "영업시간 아님",
+    "romanizedName": "로마자 표기 (자동)"
   },
   "en": {
     "appTitle": "Busan walking routes",
@@ -303,7 +304,8 @@
     "completionTimeBasis": "Based on when you finished planning",
     "nextDayTime": "Next day {time}",
     "openNow": "Open",
-    "closedNow": "Outside business hours"
+    "closedNow": "Outside business hours",
+    "romanizedName": "Romanized name (automatic)"
   },
   "ja": {
     "appTitle": "釜山の徒歩コース",
@@ -456,7 +458,8 @@
     "completionTimeBasis": "コース完成時刻を基準",
     "nextDayTime": "翌日 {time}",
     "openNow": "営業中",
-    "closedNow": "営業時間外"
+    "closedNow": "営業時間外",
+    "romanizedName": "ローマ字表記（自動）"
   },
   "zh-TW": {
     "appTitle": "釜山步行路線",
@@ -609,6 +612,7 @@
     "completionTimeBasis": "以完成行程的時間為準",
     "nextDayTime": "翌日 {time}",
     "openNow": "營業中",
-    "closedNow": "非營業時間"
+    "closedNow": "非營業時間",
+    "romanizedName": "羅馬字標示（自動）"
   }
 }

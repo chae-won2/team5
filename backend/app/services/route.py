@@ -60,6 +60,11 @@ def nearest_candidates(catalog: pd.DataFrame, start_lat, start_lon, categories=N
     return deduped
 
 
+def _is_closed(place_id, opening):
+    """True only when the researched schedule confirms the place is shut; unknown places are never excluded."""
+    return bool(opening) and status_at(place_id, *opening) == "closed"
+
+
 def _place_fields(stop, opening=None):
     spend = stop.get("estimated_spend")
     return {
@@ -106,7 +111,7 @@ def recommend_route(catalog, start_lat, start_lon, categories=None, max_minutes=
     selected = {"카페·디저트" if c == "카페/디저트" else c for c in (categories or [])}
     allowed = selected if selected_only and selected else selected | {"관광명소"} if selected else set(CATEGORIES)
     candidates = nearest_candidates(catalog, start_lat, start_lon, limit=20)
-    remaining = [p for p in candidates if p["category"] in allowed]
+    remaining = [p for p in candidates if p["category"] in allowed and not _is_closed(p["id"], opening)]
     stops, counts, origin = [], {}, {}
     current_lat, current_lon = start_lat, start_lon
     used, return_leg = 0.0, None
@@ -150,7 +155,7 @@ def recommend_route(catalog, start_lat, start_lon, categories=None, max_minutes=
     for category in CATEGORIES:
         found = 0
         for place in candidates:
-            if place["category"] != category or place["id"] in chosen:
+            if place["category"] != category or place["id"] in chosen or _is_closed(place["id"], opening):
                 continue
             origin_leg = origin.setdefault(place["id"], leg(start_lat, start_lon, place["lat"], place["lon"]))
             if not within_walk_limit(origin_leg):
@@ -214,6 +219,8 @@ def next_places(catalog, start_lat, start_lon, stops, category=None, max_minutes
     candidates = nearest_candidates(pool, current["lat"], current["lon"], [category], limit=20)
     used_seconds = result["total_seconds"] - (walking_seconds(result["return_leg"]) if result["return_leg"] else 0)
     for place in candidates:
+        if _is_closed(place["id"], opening):
+            continue
         incoming = leg(current["lat"], current["lon"], place["lat"], place["lon"])
         if not within_walk_limit(incoming):
             continue

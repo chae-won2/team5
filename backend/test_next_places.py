@@ -79,6 +79,27 @@ class NextPlaceTests(unittest.TestCase):
         self.assertEqual(result["total_minutes"],0)
         self.assertIsNone(result["return_leg"])
 
+    @patch("app.services.route.walking_leg")
+    @patch("app.services.route.status_at")
+    def test_confirmed_closed_places_are_excluded_but_unknown_and_open_stay(self, status_at, walk):
+        walk.return_value = {"leg_minutes": 5, "leg_seconds": 300, "leg_path": [], "leg_distance_m": 300}
+        status_at.side_effect = lambda place_id, weekday, minutes: {"b": "closed"}.get(place_id, "unknown")
+        # "b" is the only 카페·디저트 candidate; confirmed-closed means no alternatives at all.
+        result = next_places(self.catalog, 35.1, 129.03, [], "카페/디저트", 180, opening=(0, 600))
+        self.assertEqual(result["alternatives"], [])
+
+        from app.services.route import recommend_route
+        result = recommend_route(self.catalog, 35.1, 129.03, opening=(0, 600))
+        chosen_and_alt_ids = {s["id"] for s in result["stops"]} | {a["id"] for a in result["alternatives"]}
+        self.assertNotIn("b", chosen_and_alt_ids)
+        self.assertIn("a", chosen_and_alt_ids)  # unknown status is never excluded
+
+    @patch("app.services.route.walking_leg")
+    def test_opening_status_is_unknown_without_departure_context(self, walk):
+        walk.return_value = {"leg_minutes": 5, "leg_seconds": 300, "leg_path": [], "leg_distance_m": 300}
+        result = next_places(self.catalog, 35.1, 129.03, [], "카페/디저트", 180)
+        self.assertEqual(result["alternatives"][0]["opening_status"], "unknown")
+
     def test_invalid_ids_and_category_rejected(self):
         client=TestClient(app); base={"start_lat":35.1,"start_lon":129.03}
         for change in [{"stop_ids":["missing"]},{"stop_ids":["same","same"]},{"category":"unknown"}]:

@@ -60,10 +60,12 @@ def nearest_candidates(catalog: pd.DataFrame, start_lat, start_lon, categories=N
 
 
 def _place_fields(stop):
+    spend = stop.get("estimated_spend")
     return {
         "is_busan_taste": bool(stop.get("is_busan_taste", False)),
         "busan_taste_name": stop.get("busan_taste_name", ""),
         "duration_min": stop["duration_min"],
+        "estimated_spend": None if pd.isna(spend) else spend,
         "duration_basis": stop.get("duration_basis", "place_default"),
         "id": stop["id"],
         "name": stop["name"],

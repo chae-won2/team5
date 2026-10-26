@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { resources, translate, formatDuration } from "./src/locale.js";
+import { resources, translate, formatDuration, formatEstimatedSpend } from "./src/locale.js";
 
 test("all four languages have matching keys and substitution parameters", () => {
   const placeholders = (text) => [...text.matchAll(/\{(\w+)\}/g)].map((match) => match[1]).sort();
@@ -33,5 +33,15 @@ test("durations use hours and minutes across all screen time labels", () => {
       assert.ok(label.includes(expected), `${locale}:${key}`);
       assert.ok(!label.includes("{"), label);
     }
+  }
+});
+
+test("spend labels are per person, localized and absent for missing prices", () => {
+  assert.equal(formatEstimatedSpend("ko", 12000), "예상지출 1인당 약 12,000원");
+  assert.equal(formatEstimatedSpend("en", 12000), "Estimated spend: approx. ₩12,000 per person");
+  assert.equal(formatEstimatedSpend("ja", 12000), "予算の目安：1人あたり約₩12,000");
+  assert.equal(formatEstimatedSpend("zh-TW", 12000), "預估消費：每人約 ₩12,000");
+  for (const value of [null, undefined, "", "12000", 0, -1, NaN, Infinity]) {
+    assert.equal(formatEstimatedSpend("ko", value), "");
   }
 });

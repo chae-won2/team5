@@ -1,3 +1,4 @@
+import EstimatedSpend from "./EstimatedSpend";
 import { useI18n } from "../i18n.js";
 import { useState } from "react";
 import { sendRouteEmail } from "../api";
@@ -51,7 +52,7 @@ export default function RouteList({ stops, totalMinutes, maxMinutes, overBudget,
       return <div key={stop.id} className="route-stop">
         <div className="timeline-col"><span className="order-badge">{stop.order}</span><span className="timeline-line" /></div>
         <div className="route-stop-body"><div className="leg-label"><Icon name="walk" size={14} />{idx === 0 ? t("originWalk", { time: approx(stop.leg_minutes) }) : walkTime(stop.leg_minutes)}</div>
-          <article className="stop-card"><span className="category-tag">{t(stop.category)}</span><h3 className="stop-name">{stop.name}</h3><p className="stop-address">{stop.address}</p><div className="stop-card-bottom"><span><Icon name="clock" size={13} />{stayTime(stop.duration_min)}</span>{building && <button type="button" className="edit-stop-btn" disabled={busy} onClick={() => onRemoveStop(idx)}>{t("removeStop")}</button>}</div><div className="place-tags">{stop.payment_status === "merchant_listed" && <span className="payment-tag">{t("paymentTag")}</span>}{stop.is_busan_taste && <span className="taste-tag">{t("tasteTag")}</span>}</div></article>
+          <article className="stop-card"><span className="category-tag">{t(stop.category)}</span><h3 className="stop-name">{stop.name}</h3><p className="stop-address">{stop.address}</p><EstimatedSpend amount={stop.estimated_spend} /><div className="stop-card-bottom"><span><Icon name="clock" size={13} />{stayTime(stop.duration_min)}</span>{building && <button type="button" className="edit-stop-btn" disabled={busy} onClick={() => onRemoveStop(idx)}>{t("removeStop")}</button>}</div><div className="place-tags">{stop.payment_status === "merchant_listed" && <span className="payment-tag">{t("paymentTag")}</span>}{stop.is_busan_taste && <span className="taste-tag">{t("tasteTag")}</span>}</div></article>
 
         </div>
       </div>;

@@ -20,4 +20,10 @@ export function formatDuration(locale, value) {
   if (minutes || !hours) parts.push(translate(locale, "minutes", { n: minutes }));
   return parts.join(" ");
 }
+export function formatEstimatedSpend(locale, value) {
+  if (typeof value !== "number" || !Number.isFinite(value) || value <= 0) return "";
+  return translate(locale, "estimatedSpendPerPerson", {
+    amount: new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(value),
+  });
+}
 export { resources };

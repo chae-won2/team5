@@ -1,3 +1,4 @@
+import EstimatedSpend from "./EstimatedSpend";
 import { useI18n } from "../i18n.js";
 import { useEffect, useRef } from 'react';
 import { recordImpression } from '../api';
@@ -36,6 +37,7 @@ export default function NextPlacePicker({ categories, activeCategory, candidates
       {busy ? <p className="source-note">{t("findingNext")}</p> : activeCategory && (candidates.length ? <ul className="alt-list next-candidates">{candidates.map((place) => <li key={place.id}><button type="button" onClick={() => onSelect(place)}>
         <span className="result-name">{place.name}</span><span className="result-address">{place.address}</span>
         <span className="result-address">{stops.length ? t("fromLastStop") : t("start")}: {walkTime(place.leg_minutes)} · {stayTime(place.duration_min)}</span>
+        <EstimatedSpend amount={place.estimated_spend} />
         <span className="result-address">{t("afterAdding", { time: approx(place.projected_total_minutes) })}</span>
         {place.over_budget && <span className="candidate-time-warning">{t("timeOverrun", { limit: approx(maxMinutes), extra: approx(Math.round((place.projected_total_minutes - maxMinutes) * 10) / 10) })}</span>}
         <span className="candidate-tags">{place.payment_status === "merchant_listed" && <span className="payment-tag">{t("paymentTag")}</span>}{place.is_busan_taste && <span className="taste-tag">{t("tasteTag")}</span>}</span>

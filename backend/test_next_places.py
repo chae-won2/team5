@@ -15,6 +15,23 @@ class NextPlaceTests(unittest.TestCase):
         self.catalog = pd.DataFrame(self.rows)
 
     @patch("app.services.route.walking_leg")
+    @patch("app.services.route.rotate", side_effect=lambda places: places)
+    def test_prices_survive_candidates_and_selected_stops_without_affecting_order(self, rotate, walk):
+        walk.return_value = {"leg_minutes":5,"leg_seconds":300,"leg_path":[],"leg_distance_m":300}
+        rows = [{**self.rows[0], "estimated_spend":None}, {**self.rows[1], "estimated_spend":12000}]
+        catalog = pd.DataFrame(rows)
+        result = next_places(catalog,35.1,129.03,[],"카페/디저트",180)
+        self.assertEqual(result["alternatives"][0]["estimated_spend"],12000)
+        import json
+        from fastapi.encoders import jsonable_encoder
+        from app.routers.recommend import recalculate, RecalculateRequest
+        with patch("app.routers.recommend.load_places", return_value=catalog):
+            response = recalculate(RecalculateRequest(start_lat=35.1,start_lon=129.03,
+                stop_ids=[rows[0]["id"],rows[1]["id"]],max_minutes=180))
+        payload = json.loads(json.dumps(jsonable_encoder(response), allow_nan=False))
+        self.assertEqual([p["estimated_spend"] for p in payload["stops"]],[None,12000])
+
+    @patch("app.services.route.walking_leg")
     def test_preserves_chosen_order_and_uses_last_location(self, walk):
         walk.return_value = {"leg_minutes":5,"leg_seconds":300,"leg_path":[],"leg_distance_m":300}
         result = next_places(self.catalog,35.1,129.03,self.rows[:1],"카페/디저트",180)

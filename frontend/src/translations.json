@@ -136,7 +136,8 @@
     "noNextPlaces": "이 카테고리에서 추가할 수 있는 후보를 찾지 못했어요. 직전 장소에서 도보 20분 이내이며 전체 일정이 설정 시간 +10분 이내인 미선택 장소를 추천해요. 다른 카테고리를 선택하거나 코스를 완성해 주세요.",
     "finishCourse": "이 코스로 완성하기",
     "editCourse": "코스 편집하기",
-    "removeStop": "선택 취소"
+    "removeStop": "선택 취소",
+    "estimatedSpendPerPerson": "예상지출 1인당 약 {amount}원"
   },
   "en": {
     "appTitle": "Busan walking routes",
@@ -275,7 +276,8 @@
     "noNextPlaces": "No additional candidates were found within a 20-minute walk of the previous stop and a total time of your budget plus 10 minutes. Choose another category or finish your route.",
     "finishCourse": "Finish this route",
     "editCourse": "Edit route",
-    "removeStop": "Remove"
+    "removeStop": "Remove",
+    "estimatedSpendPerPerson": "Estimated spend: approx. ₩{amount} per person"
   },
   "ja": {
     "appTitle": "釜山の徒歩コース",
@@ -414,7 +416,8 @@
     "noNextPlaces": "直前の場所から徒歩20分以内で、全体が設定時間＋10分以内になる未選択の候補がありません。別のカテゴリーを選ぶかコースを完成してください。",
     "finishCourse": "このコースで完成",
     "editCourse": "コースを編集",
-    "removeStop": "選択を取消"
+    "removeStop": "選択を取消",
+    "estimatedSpendPerPerson": "予算の目安：1人あたり約₩{amount}"
   },
   "zh-TW": {
     "appTitle": "釜山步行路線",
@@ -553,6 +556,7 @@
     "noNextPlaces": "找不到距上一站步行20分鐘內、總行程不超過設定時間加10分鐘的未選地點。請選擇其他類別或完成路線。",
     "finishCourse": "完成這條路線",
     "editCourse": "編輯路線",
-    "removeStop": "取消選擇"
+    "removeStop": "取消選擇",
+    "estimatedSpendPerPerson": "預估消費：每人約 ₩{amount}"
   }
 }

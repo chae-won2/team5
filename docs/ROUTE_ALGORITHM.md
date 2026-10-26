@@ -4,7 +4,7 @@
 
 ## 순차 선택 API
 
-`POST /api/recommend/next`: `start_lat`, `start_lon`, `stop_ids`, `category`, `max_minutes`, `return_to_start`를 전달합니다. `category`가 없으면 선택한 코스만 재계산합니다. 운영 입력은 `data/processed/fin/places.csv`입니다. `departure_date`(`YYYY-MM-DD`)·`departure_time`(`HH:MM`)은 선택값이며, 생략하면 한국시간 현재 날짜·시각을 씁니다 — 영업시간 판정([장소 스키마](PLACES_SCHEMA.md#요일별-영업시간))에 쓰며, `closed`로 확인된 장소는 아래 4단계에서 신규 후보·대체 목록에서 제외됩니다.
+`POST /api/recommend/next`: `start_lat`, `start_lon`, `stop_ids`, `category`, `max_minutes`, `return_to_start`를 전달합니다. `category`가 없으면 선택한 코스만 재계산합니다. 운영 입력은 `data/processed/fin/places.csv`입니다. `departure_date`(`YYYY-MM-DD`)·`departure_time`(`HH:MM`)은 선택값이며, 생략하면 한국시간 현재 날짜·시각을 씁니다 — 영업시간 판정([장소 스키마](PLACES_SCHEMA.md#요일별-영업시간))에 쓰며, `closed`로 확인된 장소는 아래 4단계에서 신규 후보·대체 목록에서 제외됩니다. `language`(기본값 `ko`)는 응답의 `official_name`([공식 외국어 표기](PLACES_SCHEMA.md#공식-외국어-표기))에만 영향을 줍니다.
 
 1. 입력 범위와 ID 존재·중복을 검사하고 기존 선택 순서를 유지합니다.
 2. 선택한 업종에서 이미 고른 장소를 제외합니다.

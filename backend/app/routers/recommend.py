@@ -44,6 +44,7 @@ class NextPlaceRequest(BaseModel):
     category: Optional[Literal["식당", "카페/디저트", "카페·디저트", "관광명소", "쇼핑"]] = None
     departure_date: Optional[str] = Field(default=None, pattern=DATE_PATTERN)
     departure_time: Optional[str] = Field(default=None, pattern=TIME_PATTERN)
+    language: Literal["ko", "en", "ja", "zh-TW"] = "ko"
 
 
 @router.post("/next")
@@ -57,9 +58,9 @@ def recommend_next(req: NextPlaceRequest):
     except ValueError:
         raise HTTPException(422, "유효한 출발 날짜가 아니에요.") from None
     from app.services.route import _place_fields
-    stops = [_place_fields({**indexed.loc[i].to_dict(), "id": i}, opening) for i in req.stop_ids]
+    stops = [_place_fields({**indexed.loc[i].to_dict(), "id": i}, opening, req.language) for i in req.stop_ids]
     try:
-        result = next_places(catalog, req.start_lat, req.start_lon, stops, req.category, req.max_minutes, req.return_to_start, record_candidates=True, opening=opening)
+        result = next_places(catalog, req.start_lat, req.start_lon, stops, req.category, req.max_minutes, req.return_to_start, record_candidates=True, opening=opening, language=req.language)
         candidates = result.pop('_candidate_snapshot')
         if req.category:
             result['recommendation_id'] = issue(result['alternatives'], candidates=candidates, policy='rotation',

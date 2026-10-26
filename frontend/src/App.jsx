@@ -57,8 +57,10 @@ export default function App() {
     }
     const point = { lat, lon, label: params.get("label") || "" };
     const conditions = { startPoint: point, maxMinutes: minutes, returnToStart: params.get("return") === "1", categories: [], departureDate: date, departureTime: departure };
+    const urlLanguage = params.get("lang");
+    const language = ["ko", "en", "ja", "zh-TW"].includes(urlLanguage) ? urlLanguage : locale;
     setLoading(true);
-    getNextPlaces({ ...conditions, stops: ids.map((id) => ({ id })), category: null })
+    getNextPlaces({ ...conditions, stops: ids.map((id) => ({ id })), category: null, language })
       .then((data) => {
         applyRoute(data);
         setStartPoint(point);
@@ -70,8 +72,7 @@ export default function App() {
         setScheduleStart(departure || busanClock());
         setHasSearched(true);
         setBuilding(false);
-        const language = params.get("lang");
-        if (["ko", "en", "ja", "zh-TW"].includes(language)) setLocale(language);
+        if (language !== locale) setLocale(language);
       })
       .catch(() => setError("sharedRouteError"))
       .finally(() => setLoading(false));
@@ -111,7 +112,7 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      const data = await getNextPlaces({ ...conditions, stops: nextStops, category });
+      const data = await getNextPlaces({ ...conditions, stops: nextStops, category, language: locale });
       applyRoute(data);
       return true;
     } catch (e) {

@@ -103,7 +103,7 @@ def build_email_body(req: EmailRequest) -> str:
     missing_official = False
     for stop in req.stops:
         category = text["categories"].get(stop.category, stop.category)
-        official = official_labels(stop, req.language)
+        official = official_labels(stop.id, stop.name, stop.address, req.language)
         display_name = official.get("name") or stop.name
         display_address = official.get("address") or stop.address
         visit_window = ""

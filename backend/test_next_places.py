@@ -114,6 +114,27 @@ class NextPlaceTests(unittest.TestCase):
         self.assertEqual([p["id"] for p in result["alternatives"]], ["cafe2", "cafe1", "cafe0"])
         rotate.assert_called()
 
+    @patch("app.services.route.official_labels")
+    def test_place_fields_looks_up_official_name_only_when_language_given(self, official_labels):
+        from app.services.route import _place_fields
+        official_labels.side_effect = lambda place_id, name, address, language: (
+            {"name": "Yongdusan Park"} if place_id == "a" and language == "en" else {})
+        self.assertEqual(_place_fields(self.rows[0], language="en")["official_name"], "Yongdusan Park")
+        self.assertEqual(_place_fields(self.rows[1], language="en")["official_name"], "")  # no match for "b"
+        self.assertEqual(_place_fields(self.rows[0])["official_name"], "")  # no language -> never looked up
+        official_labels.assert_any_call("a", self.rows[0]["name"], self.rows[0]["address"], "en")
+
+    @patch("app.services.route.walking_leg")
+    @patch("app.services.route.official_labels")
+    def test_next_places_alternatives_carry_the_requested_languages_official_name(self, official_labels, walk):
+        walk.return_value = {"leg_minutes": 5, "leg_seconds": 300, "leg_path": [], "leg_distance_m": 300}
+        official_labels.side_effect = lambda place_id, name, address, language: (
+            {"name": "Jagalchi Market"} if place_id == "a" and language == "ja" else {})
+        result = next_places(pd.DataFrame([self.rows[0]]), 35.1, 129.03, [], "관광명소", 180, language="ja")
+        self.assertEqual(result["alternatives"][0]["official_name"], "Jagalchi Market")
+        result = next_places(pd.DataFrame([self.rows[0]]), 35.1, 129.03, [], "관광명소", 180)
+        self.assertEqual(result["alternatives"][0]["official_name"], "")
+
     def test_invalid_ids_and_category_rejected(self):
         client=TestClient(app); base={"start_lat":35.1,"start_lon":129.03}
         for change in [{"stop_ids":["missing"]},{"stop_ids":["same","same"]},{"category":"unknown"}]:

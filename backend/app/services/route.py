@@ -6,6 +6,7 @@ from app.services.geo import haversine_m
 from app.services.walking import walking_leg
 from app.services.exposure import rotate
 from app.services.opening_hours import status_at
+from app.services.place_labels import official_labels
 
 CATEGORIES = ["식당", "카페·디저트", "관광명소", "쇼핑"]
 WALK_SPEED_MPS = 4.5 * 1000 / 3600
@@ -65,8 +66,9 @@ def _is_closed(place_id, opening):
     return bool(opening) and status_at(place_id, *opening) == "closed"
 
 
-def _place_fields(stop, opening=None):
+def _place_fields(stop, opening=None, language=None):
     spend = stop.get("estimated_spend")
+    official = official_labels(stop["id"], stop["name"], stop["address"], language) if language else {}
     return {
         "is_busan_taste": bool(stop.get("is_busan_taste", False)),
         "busan_taste_name": stop.get("busan_taste_name", ""),
@@ -75,6 +77,7 @@ def _place_fields(stop, opening=None):
         "duration_basis": stop.get("duration_basis", "place_default"),
         "id": stop["id"],
         "name": stop["name"],
+        "official_name": official.get("name", ""),
         "category": "카페/디저트" if stop["category"] == "카페·디저트" else stop["category"],
         "address": stop["address"],
         "lon": stop["lon"],
@@ -107,7 +110,7 @@ def within_walk_limit(leg):
 
 
 def recommend_route(catalog, start_lat, start_lon, categories=None, max_minutes=90,
-                    return_to_start=False, selected_only=False, opening=None):
+                    return_to_start=False, selected_only=False, opening=None, language=None):
     selected = {"카페·디저트" if c == "카페/디저트" else c for c in (categories or [])}
     allowed = selected if selected_only and selected else selected | {"관광명소"} if selected else set(CATEGORIES)
     candidates = nearest_candidates(catalog, start_lat, start_lon, limit=20)
@@ -142,7 +145,7 @@ def recommend_route(catalog, start_lat, start_lon, categories=None, max_minutes=
         next_used = round(used + incoming["leg_minutes"] + stop["duration_min"], 1)
         if next_used + (back["leg_minutes"] if back else 0) > max_minutes:
             continue
-        stops.append({**_place_fields(stop, opening), **incoming, "order": len(stops) + 1,
+        stops.append({**_place_fields(stop, opening, language), **incoming, "order": len(stops) + 1,
                       "origin_walk_minutes": origin_leg["leg_minutes"]})
         used, return_leg = next_used, back
         current_lat, current_lon = stop["lat"], stop["lon"]
@@ -160,7 +163,7 @@ def recommend_route(catalog, start_lat, start_lon, categories=None, max_minutes=
             origin_leg = origin.setdefault(place["id"], leg(start_lat, start_lon, place["lat"], place["lon"]))
             if not within_walk_limit(origin_leg):
                 continue
-            alternatives.append({**_place_fields(place, opening), "origin_walk_minutes": origin_leg["leg_minutes"]})
+            alternatives.append({**_place_fields(place, opening, language), "origin_walk_minutes": origin_leg["leg_minutes"]})
             found += 1
             if found == 3:
                 break
@@ -202,7 +205,7 @@ def recalculate_route(start_lat, start_lon, stops, max_minutes=90, return_to_sta
     return summary
 
 
-def next_places(catalog, start_lat, start_lon, stops, category=None, max_minutes=90, return_to_start=False, *, record_candidates=False, opening=None):
+def next_places(catalog, start_lat, start_lon, stops, category=None, max_minutes=90, return_to_start=False, *, record_candidates=False, opening=None, language=None):
     """Keep user order, allow 20-minute legs and at most a 10-minute total overrun."""
     leg = route_legs()
     result = recalculate_route(start_lat, start_lon, stops, max_minutes, return_to_start, leg=leg)
@@ -232,7 +235,7 @@ def next_places(catalog, start_lat, start_lon, stops, category=None, max_minutes
         if record_candidates:
             result["_candidate_snapshot"].append({"id": place["id"], "leg_seconds": walking_seconds(incoming),
                 "duration_min": place["duration_min"], "projected_total_seconds": seconds})
-        result["alternatives"].append({**_place_fields(place, opening), **incoming,
+        result["alternatives"].append({**_place_fields(place, opening, language), **incoming,
             "projected_total_minutes": total,
             "over_budget": seconds > max_minutes * 60})
     # shortcut: rotate within the existing nearest-20 pool, not the entire catalog.

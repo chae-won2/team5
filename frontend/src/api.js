@@ -32,7 +32,7 @@ export function getRecommendation({ startLat, startLon, categories, maxMinutes, 
   });
 }
 
-export function sendRouteEmail({ email, stops, totalMinutes, maxMinutes, startPoint, emailConsent, returnLeg, language }) {
+export function sendRouteEmail({ email, stops, totalMinutes, maxMinutes, startPoint, emailConsent, returnLeg, language, departureTime }) {
   return request("/api/notify/email", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -40,6 +40,8 @@ export function sendRouteEmail({ email, stops, totalMinutes, maxMinutes, startPo
       email,
       email_consent: emailConsent === true,
       language,
+      departure_time: departureTime || null,
+      return_seconds: returnLeg?.leg_seconds,
       return_to_start: !!returnLeg,
       return_minutes: returnLeg?.leg_minutes,
       total_minutes: totalMinutes,

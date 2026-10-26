@@ -14,12 +14,12 @@
 | `data/processed/bin/GIS/boundaries/` | 행정동·시장 상권영역과 출처 |
 | `data/processed/bin/GIS/full_busan/` | 전체 조사 스냅샷. 최신 서비스 명부가 아님 |
 | `data/processed/bin/travel_purposes/` | 여행 목적 분류·후속 매칭·검토 |
-
-`data/raw/bin/`과 `data/processed/bin/`은 백엔드가 읽지 않는 원천·중간·레거시 산출물을 모아두는 자리다. 전처리 스크립트는 여전히 이 경로를 입력·출력으로 사용하며, 재생성 가능하다는 이유로 git 추적에서 제외하지 않는다.
-| `data/shopping_verification/` | 담당자 선정 쇼핑 입력 |
-| `data/experiments/weights_v01/` | 리뷰 기반 40곳 실험·수동 교체 이력. 운영 미반영 |
-| `data/experiments/weights_400/` | 식당·카페 400곳 엑셀 표본. 리뷰 조건 없음 |
+| `data/bin/shopping_verification/` | 담당자 선정 쇼핑 입력 |
+| `data/bin/experiments/weights_v01/` | 리뷰 기반 40곳 실험·수동 교체 이력. 운영 미반영 |
+| `data/bin/experiments/weights_400/` | 식당·카페 400곳 엑셀 표본. 리뷰 조건 없음 |
 | Supabase `app_private.exposure_lists` / `app_private.exposure_candidates` | 추천 요청·조건·후보·배정 순위·표시 이력. 운영/실험 구분 |
+
+`data/raw/bin/`, `data/processed/bin/`, `data/bin/`은 백엔드가 읽지 않는 원천·중간·레거시·실험 산출물을 모아두는 자리다. `data/` 바로 아래에는 `processed/`, `raw/`, `bin/`만 둔다. 전처리 스크립트는 여전히 이 경로를 입력·출력으로 사용하며, 재생성 가능하다는 이유로 git 추적에서 제외하지 않는다.
 
 원본·전체 가맹점·업종 분류 가능 데이터·최종 서비스 장소·Google 연결률은 분모가 다릅니다. 서로 다른 집계의 비율을 섞어 발표하지 않습니다.
 

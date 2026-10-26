@@ -1,10 +1,10 @@
 {
   "ko": {
     "subject": "부산 풀코스 · 나의 도보 여행",
-    "total": "총 일정: 약 {n}분 (체류 + 예상 도보 이동)",
-    "walk": "이전 지점에서 도보 약 {n}분",
-    "stay": "체류 약 {n}분 (기본값)",
-    "return": "출발지로 돌아오기: 도보 약 {n}분 (전체 시간에 포함)",
+    "total": "총 일정: 약 {n} (체류 + 예상 도보 이동)",
+    "walk": "이전 지점에서 도보 약 {n}",
+    "stay": "체류 약 {n} (기본값)",
+    "return": "출발지로 돌아오기: 도보 약 {n} (전체 시간에 포함)",
     "course_link": "내 도보 코스 다시 열기",
     "source": "영업·휴무와 결제 가능 여부는 방문 전 확인해주세요. 도보시간과 체류시간은 예상값입니다.",
     "consent": "이메일 전송을 위한 이용 동의가 필요합니다.",
@@ -19,14 +19,18 @@
     "native_name": "한국어 장소명",
     "address": "주소",
     "native_address": "한국어 주소",
-    "official_fallback": "공식 외국어 표기가 확인되지 않은 장소명·주소는 한국어로 표시합니다."
+    "official_fallback": "공식 외국어 표기가 확인되지 않은 장소명·주소는 한국어로 표시합니다.",
+    "departure": "출발 {time} (한국시간)",
+    "next_day": "익일 {time}",
+    "hours": "{n}시간",
+    "minutes": "{n}분"
   },
   "en": {
     "subject": "Busan Full Course · Your walking route",
-    "total": "Total: about {n} min (stops + estimated walking time)",
-    "walk": "From the previous stop: about {n} min on foot",
-    "stay": "Stay: about {n} min (default)",
-    "return": "Return to the start: about {n} min on foot (included in total)",
+    "total": "Total: about {n} (stops + estimated walking time)",
+    "walk": "From the previous stop: about {n} on foot",
+    "stay": "Stay: about {n} (default)",
+    "return": "Return to the start: about {n} on foot (included in total)",
     "course_link": "Reopen your walking route",
     "source": "Check opening hours, days off and payment availability before visiting. Walking and stop durations are estimates.",
     "consent": "Consent is required to use your email address for route delivery.",
@@ -41,14 +45,18 @@
     "native_name": "Korean name",
     "address": "Address",
     "native_address": "Korean address",
-    "official_fallback": "Names and addresses without a verified official translation are shown in Korean."
+    "official_fallback": "Names and addresses without a verified official translation are shown in Korean.",
+    "departure": "Departure {time} (Korea time)",
+    "next_day": "Next day {time}",
+    "hours": "{n} hr",
+    "minutes": "{n} min"
   },
   "ja": {
     "subject": "BUSAN FULL COURSE · あなたの徒歩コース",
-    "total": "全体時間：約{n}分（滞在＋徒歩の予測時間）",
-    "walk": "前の場所から徒歩約{n}分",
-    "stay": "滞在：約{n}分（目安）",
-    "return": "出発地まで徒歩約{n}分（全体時間に含む）",
+    "total": "全体時間：約{n}（滞在＋徒歩の予測時間）",
+    "walk": "前の場所から徒歩約{n}",
+    "stay": "滞在：約{n}（目安）",
+    "return": "出発地まで徒歩約{n}（全体時間に含む）",
     "course_link": "徒歩コースを再表示",
     "source": "営業時間・定休日と決済可否は訪問前にご確認ください。徒歩・滞在時間は目安です。",
     "consent": "コース送信のためのメールアドレス利用への同意が必要です。",
@@ -63,14 +71,18 @@
     "native_name": "韓国語名",
     "address": "住所",
     "native_address": "韓国語住所",
-    "official_fallback": "公式の外国語表記を確認できない名称・住所は韓国語で表示しています。"
+    "official_fallback": "公式の外国語表記を確認できない名称・住所は韓国語で表示しています。",
+    "departure": "出発 {time}（韓国時間）",
+    "next_day": "翌日 {time}",
+    "hours": "{n}時間",
+    "minutes": "{n}分"
   },
   "zh-TW": {
     "subject": "BUSAN FULL COURSE · 您的步行路線",
-    "total": "總行程：約{n}分鐘（停留＋預估步行時間）",
-    "walk": "從上一站步行約{n}分鐘",
-    "stay": "停留：約{n}分鐘（預設值）",
-    "return": "返回出發地點：步行約{n}分鐘（包含在總時間內）",
+    "total": "總行程：約{n}（停留＋預估步行時間）",
+    "walk": "從上一站步行約{n}",
+    "stay": "停留：約{n}（預設值）",
+    "return": "返回出發地點：步行約{n}（包含在總時間內）",
     "course_link": "重新開啟步行路線",
     "source": "出發前請確認營業時間、休息日及付款方式。步行與停留時間皆為預估值。",
     "consent": "寄送路線前，需同意使用電子郵件地址。",
@@ -85,6 +97,10 @@
     "native_name": "韓文名稱",
     "address": "地址",
     "native_address": "韓文地址",
-    "official_fallback": "尚未確認官方外文表記的地點名稱與地址，將以韓文顯示。"
+    "official_fallback": "尚未確認官方外文表記的地點名稱與地址，將以韓文顯示。",
+    "departure": "出發 {time}（韓國時間）",
+    "next_day": "翌日 {time}",
+    "hours": "{n}小時",
+    "minutes": "{n}分鐘"
   }
 }

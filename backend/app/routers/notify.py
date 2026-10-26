@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 import logging
+import math
 import os
 import smtplib
 
@@ -31,8 +32,9 @@ class RouteStop(BaseModel):
     name: str
     category: str
     address: str
-    leg_minutes: Optional[float] = None
-    duration_min: Optional[float] = None
+    leg_minutes: Optional[float] = Field(default=None, ge=0, allow_inf_nan=False)
+    leg_seconds: Optional[float] = Field(default=None, ge=0, allow_inf_nan=False)
+    duration_min: Optional[float] = Field(default=None, ge=0, allow_inf_nan=False)
     lat: Optional[float] = None
     lon: Optional[float] = None
 
@@ -42,7 +44,9 @@ class EmailRequest(BaseModel):
     email: str
     email_consent: bool = False
     return_to_start: bool = False
-    return_minutes: Optional[float] = None
+    departure_time: Optional[str] = Field(default=None, min_length=5, max_length=5, pattern=r"^(?:[01][0-9]|2[0-3]):[0-5][0-9]$")
+    return_minutes: Optional[float] = Field(default=None, ge=0, allow_inf_nan=False)
+    return_seconds: Optional[float] = Field(default=None, ge=0, allow_inf_nan=False)
     total_minutes: Optional[float] = None
     max_minutes: int = Field(default=360, ge=30, le=360)
     start_label: Optional[str] = None
@@ -56,22 +60,62 @@ def build_course_link(req: EmailRequest) -> Optional[str]:
         return None
     params = {"start": f"{req.start_lat},{req.start_lon}", "stop": [s.id for s in req.stops],
               "minutes": req.max_minutes, "return": "1" if req.return_to_start else "0", "lang": req.language}
+    if req.departure_time:
+        params["depart"] = req.departure_time
     if req.start_label:
         params["label"] = req.start_label
     site = os.environ.get("PUBLIC_SITE_URL", "https://busan-full-course.onrender.com").rstrip("/")
     return site + "/?" + urlencode(params, doseq=True)
 
 
+def format_duration(minutes, text):
+    if minutes is None:
+        return "-"
+    hours, remaining = divmod(math.ceil(minutes), 60)
+    parts = []
+    if hours:
+        parts.append(text["hours"].format(n=hours))
+    if remaining or not hours:
+        parts.append(text["minutes"].format(n=remaining))
+    return " ".join(parts)
+
+
+def schedule_range(departure_time, start_seconds, end_seconds, text):
+    hour, minute = map(int, departure_time.split(":"))
+    def clock(seconds):
+        value = hour * 60 + minute + math.ceil(seconds / 60 - 1e-9)
+        days, day_minute = divmod(value, 1440)
+        h, m = divmod(day_minute, 60)
+        value = f"{h:02d}:{m:02d}"
+        return text["next_day"].format(time=value) if days else value
+    return clock(start_seconds) + " ~ " + clock(end_seconds)
+
+
 def build_email_body(req: EmailRequest) -> str:
     text = EMAIL_COPY[req.language]
-    lines = [text["total"].format(n=req.total_minutes), ""]
+    lines = [text["total"].format(n=format_duration(req.total_minutes, text)), ""]
+    timed = bool(req.departure_time) and all(
+        (s.leg_seconds is not None or s.leg_minutes is not None) and s.duration_min is not None
+        for s in req.stops)
+    elapsed = 0.0
+    if req.departure_time:
+        lines.extend([text["departure"].format(time=req.departure_time), ""])
     missing_official = False
     for stop in req.stops:
         category = text["categories"].get(stop.category, stop.category)
         official = official_labels(stop, req.language)
         display_name = official.get("name") or stop.name
         display_address = official.get("address") or stop.address
-        lines.append(f"{stop.order}. {display_name} ({category})")
+        visit_window = ""
+        if timed:
+            walk_start = elapsed
+            elapsed += stop.leg_seconds if stop.leg_seconds is not None else stop.leg_minutes * 60
+            walk_window = schedule_range(req.departure_time, walk_start, elapsed, text)
+            lines.append(text["walk"].format(n=format_duration((elapsed-walk_start)/60, text)) + f" ({walk_window})")
+            visit_start = elapsed
+            elapsed += stop.duration_min * 60
+            visit_window = " (" + schedule_range(req.departure_time, visit_start, elapsed, text) + ")"
+        lines.append(f"{stop.order}. {display_name}{visit_window} ({category})")
         if display_name != stop.name:
             lines.append(f"   {text['native_name']}: {stop.name}")
         lines.append(f"   {text['address']}: {display_address}")
@@ -79,13 +123,17 @@ def build_email_body(req: EmailRequest) -> str:
             lines.append(f"   {text['native_address']}: {stop.address}")
         if req.language != "ko" and (not official.get("name") or not official.get("address")):
             missing_official = True
-        if stop.leg_minutes is not None:
-            lines.append("   " + text["walk"].format(n=stop.leg_minutes))
+        if stop.leg_minutes is not None and not timed:
+            lines.append("   " + text["walk"].format(n=format_duration(stop.leg_minutes, text)))
         if stop.duration_min is not None:
-            lines.append("   " + text["stay"].format(n=stop.duration_min))
+            lines.append("   " + text["stay"].format(n=format_duration(stop.duration_min, text)))
         lines.append("")
     if req.return_to_start:
-        lines.append(text["return"].format(n=req.return_minutes))
+        value = text["return"].format(n=format_duration(req.return_minutes, text))
+        seconds = req.return_seconds if req.return_seconds is not None else req.return_minutes * 60 if req.return_minutes is not None else None
+        if timed and seconds is not None:
+            value += " (" + schedule_range(req.departure_time, elapsed, elapsed+seconds, text) + ")"
+        lines.append(value)
     course_link = build_course_link(req)
     if course_link:
         lines.extend([text["course_link"] + ": " + course_link, ""])

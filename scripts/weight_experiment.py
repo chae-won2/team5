@@ -21,7 +21,7 @@ from app.services.walking import walking_leg, WalkingError
 
 WEIGHTS = {'식당': .75, '카페·디저트': .70, '관광명소': 1., '쇼핑': 1.}
 TARGETS = {'식당': 17, '카페·디저트': 17, '관광명소': 3, '쇼핑': 3}
-OUT = ROOT / 'data/experiments/weights_v01'
+OUT = ROOT / 'data/bin/experiments/weights_v01'
 
 
 def read(path):

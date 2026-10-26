@@ -21,4 +21,4 @@ CSV에서는 `카페·디저트`, 화면·API에서는 `카페/디저트`를 사
 - `not_verified`: 관광명소 자체의 결제 여부 미확인. 모든 관광명소가 가맹점은 아닙니다.
 - `#부산의맛`: `data/raw/dongbaekjeon/2026_부산의맛_식당목록.csv`와 검증 규칙으로 연결한 장소에만 표시합니다. 점수 가산이 아닙니다.
 
-`scripts/build_places.py`가 승인된 MVP 분류와 관광·쇼핑 선정을 통합합니다. 쇼핑 입력은 `data/shopping_verification/shopping_places_final.csv`, 관광명소 입력은 `data/processed/bin/mvp_tourist_spots.csv`입니다. 필수값 부족·좌표/유형 불명확·권역 밖·원천 충돌은 검수 대상으로 분리합니다. 업종 검수 파일은 고객 리뷰가 아니며 운영 후보를 Google 리뷰 유무로 교체하지 않습니다.
+`scripts/build_places.py`가 승인된 MVP 분류와 관광·쇼핑 선정을 통합합니다. 쇼핑 입력은 `data/bin/shopping_verification/shopping_places_final.csv`, 관광명소 입력은 `data/processed/bin/mvp_tourist_spots.csv`입니다. 필수값 부족·좌표/유형 불명확·권역 밖·원천 충돌은 검수 대상으로 분리합니다. 업종 검수 파일은 고객 리뷰가 아니며 운영 후보를 Google 리뷰 유무로 교체하지 않습니다.

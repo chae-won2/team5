@@ -9,6 +9,7 @@ export default function FilterPanel({
   categories, toggleCategory,
   returnToStart, setReturnToStart,
   maxMinutes, setMaxMinutes,
+  departureTime, setDepartureTime,
   onSubmit, loading, collapsed,
 }) {
   const { t, minutes, placeLabel, message } = useI18n();
@@ -70,6 +71,7 @@ export default function FilterPanel({
           <span className="filter-summary-pin"><Icon name="pin" size={15} /> {placeLabel(startPoint)}</span>
           <span className="filter-summary-dot">·</span>
           <span>{minutes(maxMinutes)}</span>
+          {departureTime && <span>{t("departureAt", { time: departureTime })}</span>}
           <span className="filter-summary-dot">·</span>
           <span>{categories.length ? categories.map((category) => t(category)).join(", ") : t("all")}</span>
           <span>{returnToStart ? t("returnShort") : t("finishShort")}</span>
@@ -132,6 +134,12 @@ export default function FilterPanel({
           <option value="end">{t("finishLast")}</option><option value="return">{t("returnStart")}</option>
         </select>
         <span className="start-point-hint">{t("radiusHint")}{returnToStart && t("returnHint")}</span>
+      </div>
+
+      <div className="field">
+        <label className="field-title" htmlFor="departure-time">{t("departureTime")}</label>
+        <div className="departure-time-row"><input id="departure-time" type="time" step="60" value={departureTime} onChange={(e) => setDepartureTime(e.target.value)} />{departureTime && <button type="button" className="filter-edit-btn" onClick={() => setDepartureTime("")}>{t("automaticDeparture")}</button>}</div>
+        <span className="start-point-hint">{t("departureHint")}</span>
       </div>
 
       <label className="field">

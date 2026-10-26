@@ -55,7 +55,8 @@ html[lang=en] .header-nav{gap:20px}
 .next-place-picker{border-top:1px solid var(--border);padding-top:20px;display:grid;gap:12px}
 .next-category-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
 .next-category-tabs button{font:inherit;font-size:11px;line-height:1.4;padding:10px 3px;border:1px solid var(--border);border-radius:7px;background:#fff;color:var(--text-muted);cursor:pointer}
-.next-category-tabs button[aria-pressed=true]{background:var(--primary-light);border-color:var(--primary);color:var(--primary);font-weight:700}
+.next-category-tabs button.trip-category-selected{background:var(--primary-light);border-color:var(--primary);color:var(--primary);font-weight:600}
+.next-category-tabs button[aria-pressed=true]{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:700}
 .remaining-time{font-size:12px;color:var(--primary);font-weight:600}
 .candidate-time-warning{display:block;color:#8b4e12;background:#fff4e5;padding:8px 10px;border-radius:6px;font-size:12px;line-height:1.6;margin-top:6px}
 .next-candidates .confirm-place{display:block;margin-top:10px;font-size:12px;font-weight:650;color:var(--primary)}
@@ -65,3 +66,7 @@ html[lang=en] .header-nav{gap:20px}
 .estimated-spend{display:block;margin-top:8px;font-size:11px;line-height:1.6;font-weight:600;color:var(--primary)}
 
 .payment-tag-neutral{color:var(--muted,#6b7280);font-weight:500}
+
+.departure-time-row{display:flex;align-items:center;gap:10px}.departure-time-row input{font:inherit;color:var(--text);border:1px solid var(--border);border-radius:7px;background:#fff;padding:9px 12px;min-width:0;flex:1}
+.schedule-start{margin:12px 0;font-size:12px;font-weight:650;color:var(--primary)}.schedule-start small{display:block;margin-top:3px;font-size:11px;font-weight:400;color:var(--text-muted)}
+.stop-time{display:inline-block;margin-left:7px;font-size:12px;line-height:1.6;font-weight:500;color:var(--primary);font-variant-numeric:tabular-nums}.leg-label{flex-wrap:wrap}.leg-time{font-variant-numeric:tabular-nums}

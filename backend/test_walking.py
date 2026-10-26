@@ -178,7 +178,7 @@ class WalkingTests(unittest.TestCase):
         from app.routers.notify import EmailRequest,build_email_body
         req=EmailRequest(email="test@example.com",start_lat=35.1,start_lon=129.03,return_to_start=True,return_minutes=8,
             stops=[{"order":1,"name":"test","category":"관광명소","address":"test","lat":35.11,"lon":129.04}])
-        self.assertIn("8.0",build_email_body(req))
+        self.assertIn("8분",build_email_body(req))
 
     def test_taste_tags_require_exact_district_and_unique_name(self):
         import pandas as pd

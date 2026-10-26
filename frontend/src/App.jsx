@@ -1,3 +1,4 @@
+import { busanClock, validDepartureTime } from "./schedule.js";
 import { useI18n } from "./i18n.js";
 import { useEffect, useState } from "react";
 import FilterPanel from "./components/FilterPanel";
@@ -16,6 +17,8 @@ export default function App() {
   const [allCategories, setAllCategories] = useState([]);
   const [categories, setCategories] = useState([]);
   const [returnToStart, setReturnToStart] = useState(false);
+  const [departureTime, setDepartureTime] = useState("");
+  const [scheduleStart, setScheduleStart] = useState("");
   const [building, setBuilding] = useState(false);
   const [activeCategory, setActiveCategory] = useState(null);
   const [returnLeg, setReturnLeg] = useState(null);
@@ -44,12 +47,13 @@ export default function App() {
     const origin = (params.get("start") || "").split(",");
     const lat = Number(origin[0]), lon = Number(origin[1]);
     const minutes = Number(params.get("minutes"));
-    if (origin.length !== 2 || origin.some((v) => !v.trim()) || !Number.isFinite(lat) || !Number.isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180 || !Number.isInteger(minutes) || minutes < 30 || minutes > 360 || ids.length > 24 || new Set(ids).size !== ids.length) {
+    const departure = params.get("depart") || "";
+    if ((departure && !validDepartureTime(departure)) || origin.length !== 2 || origin.some((v) => !v.trim()) || !Number.isFinite(lat) || !Number.isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180 || !Number.isInteger(minutes) || minutes < 30 || minutes > 360 || ids.length > 24 || new Set(ids).size !== ids.length) {
       setError("sharedRouteError");
       return;
     }
     const point = { lat, lon, label: params.get("label") || "" };
-    const conditions = { startPoint: point, maxMinutes: minutes, returnToStart: params.get("return") === "1", categories: [] };
+    const conditions = { startPoint: point, maxMinutes: minutes, returnToStart: params.get("return") === "1", categories: [], departureTime: departure };
     setLoading(true);
     getNextPlaces({ ...conditions, stops: ids.map((id) => ({ id })), category: null })
       .then((data) => {
@@ -58,6 +62,8 @@ export default function App() {
         setMaxMinutes(minutes);
         setReturnToStart(conditions.returnToStart);
         setAppliedConditions(conditions);
+        setDepartureTime(departure);
+        setScheduleStart(departure || busanClock());
         setHasSearched(true);
         setBuilding(false);
         const language = params.get("lang");
@@ -84,23 +90,25 @@ export default function App() {
 
   function handleSubmit() {
     if (!startPoint || loading) return;
-    setAppliedConditions({ startPoint, maxMinutes, returnToStart, categories: [...categories] });
+    const conditions = { startPoint, maxMinutes, returnToStart, categories: [...categories], departureTime };
+    setAppliedConditions(conditions);
+    setScheduleStart(departureTime || busanClock());
     applyRoute({ stops: [], total_minutes: 0, over_budget: false });
-    setActiveCategory(null);
     setError(null);
     setNotice(null);
     setHasSearched(true);
     setBuilding(true);
+    updateSelection([], categories[0] || allCategories[0] || null, conditions);
   }
 
-  async function updateSelection(nextStops, category = null) {
-    if (!appliedConditions || loading) return;
+  async function updateSelection(nextStops, category = null, conditions = appliedConditions) {
+    if (!conditions || loading) return;
+    setActiveCategory(category);
     setLoading(true);
     setError(null);
     try {
-      const data = await getNextPlaces({ ...appliedConditions, stops: nextStops, category });
+      const data = await getNextPlaces({ ...conditions, stops: nextStops, category });
       applyRoute(data);
-      setActiveCategory(category);
       return true;
     } catch (e) {
       setError(e.message || t("recalculateError"));
@@ -130,6 +138,7 @@ export default function App() {
               categories={categories} toggleCategory={toggleCategory}
               returnToStart={returnToStart} setReturnToStart={setReturnToStart}
               maxMinutes={maxMinutes} setMaxMinutes={setMaxMinutes}
+              departureTime={departureTime} setDepartureTime={setDepartureTime}
               onSubmit={handleSubmit} loading={loading}
               collapsed={phase === "result"}
             />
@@ -139,19 +148,21 @@ export default function App() {
               stops={stops} alternatives={alternatives}
               totalMinutes={totalMinutes} overBudget={overBudget}
               maxMinutes={appliedConditions?.maxMinutes || maxMinutes}
+              scheduleStart={scheduleStart} automaticStart={!appliedConditions?.departureTime}
               phase={phase} startPoint={appliedConditions?.startPoint || startPoint} returnLeg={returnLeg}
               building={building} busy={loading}
               onRemoveStop={(index) => updateSelection(stops.filter((_, i) => i !== index))}
             />
               {hasSearched && (building ? <NextPlacePicker
                 categories={appliedConditions.categories.length ? appliedConditions.categories : allCategories}
+                selectedCategories={appliedConditions.categories}
                 activeCategory={activeCategory} candidates={alternatives} busy={loading}
                 recommendationId={recommendationId}
                 maxMinutes={appliedConditions.maxMinutes}
                 stops={stops} remainingMinutes={Math.max(0, appliedConditions.maxMinutes - totalMinutes)}
                 onCategory={(category) => updateSelection(stops, category)}
                 onSelect={(place) => updateSelection([...stops, place])}
-                onFinish={() => { setBuilding(false); setAlternatives([]); }}
+                onFinish={() => { if (!appliedConditions.departureTime) setScheduleStart(busanClock()); setBuilding(false); setAlternatives([]); }}
               /> : <button type="button" className="secondary-btn" onClick={() => { setBuilding(true); setActiveCategory(null); }}>{t("editCourse")}</button>)}
             </div>
           </div>

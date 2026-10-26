@@ -42,6 +42,7 @@ export function sendRouteEmail({ email, stops, totalMinutes, maxMinutes, startPo
       language,
       departure_time: departureTime || null,
       return_seconds: returnLeg?.leg_seconds,
+      return_estimated: returnLeg?.routing_source === "estimated",
       return_to_start: !!returnLeg,
       return_minutes: returnLeg?.leg_minutes,
       total_minutes: totalMinutes,

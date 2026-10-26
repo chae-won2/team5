@@ -44,11 +44,7 @@ function ClickHandler({ onPick }) {
 
 export default function MapView({ stops, returnLeg, startPoint, onPickStart, totalMinutes, overBudget, maxMinutes }) {
   const { t, approx, minutes, locale } = useI18n();
-  const path = stops.some((s) => s.leg_path?.length)
-    ? [...stops.flatMap((s) => s.leg_path || []), ...(returnLeg?.leg_path || [])]
-    : startPoint
-    ? [[startPoint.lat, startPoint.lon], ...stops.map((s) => [s.lat, s.lon])]
-    : [];
+  const paths = [...stops, returnLeg].filter((leg) => leg && leg.routing_source !== "estimated" && leg.leg_path?.length > 1).map((leg) => leg.leg_path);
   const progressPct = maxMinutes ? Math.min(100, Math.round((totalMinutes / maxMinutes) * 100)) : 0;
 
   return (
@@ -64,7 +60,7 @@ export default function MapView({ stops, returnLeg, startPoint, onPickStart, tot
         <FlyToStart startPoint={startPoint} />
         <ZoomControl key={locale} position="bottomright" zoomInTitle={t("zoomIn")} zoomOutTitle={t("zoomOut")} />
 
-        {path.length > 1 && <Polyline positions={path} color="#0d9488" weight={4} opacity={0.9} />}
+        {paths.map((path, index) => <Polyline key={index} positions={path} color="#0d9488" weight={4} opacity={0.9} />)}
 
         {startPoint && (
           <Marker position={[startPoint.lat, startPoint.lon]} icon={startIcon}>

@@ -30,6 +30,7 @@ export default function App() {
   const [recommendationId, setRecommendationId] = useState(null);
   const [totalMinutes, setTotalMinutes] = useState(0);
   const [overBudget, setOverBudget] = useState(false);
+  const [routingEstimated, setRoutingEstimated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [notice, setNotice] = useState(null);
   const [error, setError] = useState(null);
@@ -91,6 +92,7 @@ export default function App() {
     setReturnLeg(data.return_leg || null);
     setTotalMinutes(data.total_minutes);
     setOverBudget(data.over_budget);
+    setRoutingEstimated(!!data.routing_estimated);
   }
 
   function handleSubmit() {
@@ -148,6 +150,7 @@ export default function App() {
               onSubmit={handleSubmit} loading={loading}
               collapsed={phase === "result"}
             />
+            {routingEstimated && <p className="routing-estimate-note" role="status">{t("walkingEstimateNotice")}</p>}
             {notice && <div className="source-note" role="status">{message(notice)}</div>}
             {error && <div className="error">⚠ {message(error)}</div>}
             <div id="trip-results"><RouteList

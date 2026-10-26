@@ -100,7 +100,9 @@ def route_legs():
         key = (a_lat, a_lon, b_lat, b_lon)
         if key not in cache:
             cache[key] = walking_leg(*key)
+            leg.estimated |= cache[key].get("routing_source") == "estimated"
         return cache[key]
+    leg.estimated = False
     return leg
 
 
@@ -170,6 +172,7 @@ def recommend_route(catalog, start_lat, start_lon, categories=None, max_minutes=
             found += 1
             if found == 3:
                 break
+    result["routing_estimated"] = leg.estimated
     result["alternatives"] = alternatives
     if not primary_available:
         result["message"] = "선택한 관심 업종의 장소는 아직 준비 중이에요. 다른 업종을 선택해주세요."
@@ -184,9 +187,10 @@ def summarize_route(stops, max_minutes, return_leg=None):
     walk_seconds = sum(walking_seconds(s) for s in stops) + (walking_seconds(return_leg) if return_leg else 0)
     stay = sum(s["duration_min"] for s in stops)
     total_seconds = walk_seconds + stay * 60
+    estimated = any(s.get("routing_source") == "estimated" for s in [*stops, return_leg or {}])
     return {"stops": stops, "total_walk_minutes": round(walk_seconds / 60, 1), "total_stay_minutes": round(stay, 1),
             "total_minutes": round(total_seconds / 60, 1), "total_seconds": total_seconds,
-            "over_budget": total_seconds > max_minutes * 60, "routing_source": "tmap",
+            "over_budget": total_seconds > max_minutes * 60, "routing_source": "estimated" if estimated else "tmap", "routing_estimated": estimated,
             "return_leg": return_leg, "return_to_start": return_leg is not None,
             "max_leg_walk_minutes": MAX_LEG_WALK_MINUTES, "max_overrun_minutes": MAX_OVERRUN_MINUTES}
 
@@ -241,6 +245,7 @@ def next_places(catalog, start_lat, start_lon, stops, category=None, max_minutes
         result["alternatives"].append({**_place_fields(place, opening, language), **incoming,
             "projected_total_minutes": total,
             "over_budget": seconds > max_minutes * 60})
+    result["routing_estimated"] = leg.estimated
     # shortcut: rotate within the existing nearest-20 pool, not the entire catalog.
     # Exposure rotation is a 동백전 가맹점 fairness mechanism; attractions stay in distance order.
     fitting = [p for p in result["alternatives"] if not p["over_budget"]]

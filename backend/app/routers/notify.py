@@ -33,6 +33,7 @@ class RouteStop(BaseModel):
     category: str
     address: str
     leg_minutes: Optional[float] = Field(default=None, ge=0, allow_inf_nan=False)
+    routing_source: Optional[Literal["tmap", "estimated"]] = None
     leg_seconds: Optional[float] = Field(default=None, ge=0, allow_inf_nan=False)
     duration_min: Optional[float] = Field(default=None, ge=0, allow_inf_nan=False)
     lat: Optional[float] = None
@@ -46,6 +47,7 @@ class EmailRequest(BaseModel):
     return_to_start: bool = False
     departure_time: Optional[str] = Field(default=None, min_length=5, max_length=5, pattern=r"^(?:[01][0-9]|2[0-3]):[0-5][0-9]$")
     return_minutes: Optional[float] = Field(default=None, ge=0, allow_inf_nan=False)
+    return_estimated: bool = False
     return_seconds: Optional[float] = Field(default=None, ge=0, allow_inf_nan=False)
     total_minutes: Optional[float] = None
     max_minutes: int = Field(default=360, ge=30, le=360)
@@ -94,6 +96,8 @@ def schedule_range(departure_time, start_seconds, end_seconds, text):
 def build_email_body(req: EmailRequest) -> str:
     text = EMAIL_COPY[req.language]
     lines = [text["total"].format(n=format_duration(req.total_minutes, text)), ""]
+    if req.return_estimated or any(s.routing_source == "estimated" for s in req.stops):
+        lines.extend([text["walking_estimate_notice"], ""])
     timed = bool(req.departure_time) and all(
         (s.leg_seconds is not None or s.leg_minutes is not None) and s.duration_min is not None
         for s in req.stops)

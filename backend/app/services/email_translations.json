@@ -24,7 +24,8 @@
     "next_day": "익일 {time}",
     "hours": "{n}시간",
     "minutes": "{n}분",
-    "romanized_name": "로마자 표기 (자동)"
+    "romanized_name": "로마자 표기 (자동)",
+    "walking_estimate_notice": "도보 경로 서비스가 일시적으로 제한되어 이동시간을 직선거리 기반으로 추정했어요. 도보 20분 범위와 일정 시각도 추정 기준이며, 실제 경로·소요시간은 다를 수 있어요."
   },
   "en": {
     "subject": "Busan Full Course · Your walking route",
@@ -51,7 +52,8 @@
     "next_day": "Next day {time}",
     "hours": "{n} hr",
     "minutes": "{n} min",
-    "romanized_name": "Romanized name (automatic)"
+    "romanized_name": "Romanized name (automatic)",
+    "walking_estimate_notice": "Walking routing is temporarily unavailable. Walking times, the 20-minute range and schedule are estimated from straight-line distances; actual routes and times may differ."
   },
   "ja": {
     "subject": "BUSAN FULL COURSE · あなたの徒歩コース",
@@ -78,7 +80,8 @@
     "next_day": "翌日 {time}",
     "hours": "{n}時間",
     "minutes": "{n}分",
-    "romanized_name": "ローマ字表記（自動）"
+    "romanized_name": "ローマ字表記（自動）",
+    "walking_estimate_notice": "徒歩経路サービスが一時的に利用できないため、直線距離から移動時間を推定しています。徒歩20分の範囲と予定時刻も推定であり、実際の経路・所要時間とは異なる場合があります。"
   },
   "zh-TW": {
     "subject": "BUSAN FULL COURSE · 您的步行路線",
@@ -105,6 +108,7 @@
     "next_day": "翌日 {time}",
     "hours": "{n}小時",
     "minutes": "{n}分鐘",
-    "romanized_name": "羅馬字標示（自動）"
+    "romanized_name": "羅馬字標示（自動）",
+    "walking_estimate_notice": "步行路線服務暫時無法使用，目前依直線距離估算步行時間。20分鐘步行範圍及行程時刻亦為估算，實際路線與所需時間可能不同。"
   }
 }

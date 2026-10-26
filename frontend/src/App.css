@@ -70,3 +70,5 @@ html[lang=en] .header-nav{gap:20px}
 .departure-time-row{display:flex;align-items:center;gap:10px}.departure-time-row input{font:inherit;color:var(--text);border:1px solid var(--border);border-radius:7px;background:#fff;padding:9px 12px;min-width:0;flex:1}
 .schedule-start{margin:12px 0;font-size:12px;font-weight:650;color:var(--primary)}.schedule-start small{display:block;margin-top:3px;font-size:11px;font-weight:400;color:var(--text-muted)}
 .stop-time{display:inline-block;margin-left:7px;font-size:12px;line-height:1.6;font-weight:500;color:var(--primary);font-variant-numeric:tabular-nums}.leg-label{flex-wrap:wrap}.leg-time{font-variant-numeric:tabular-nums}
+
+.routing-estimate-note{padding:12px;border:1px solid #e7cf9f;border-radius:8px;background:#fff8e9;color:#765620;font-size:12px;line-height:1.6;margin:12px 0}

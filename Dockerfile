@@ -12,6 +12,7 @@ COPY backend/requirements.txt ./backend/requirements.txt
 RUN pip install --no-cache-dir -r backend/requirements.txt
 COPY backend/app/ ./backend/app/
 COPY data/processed/fin/places.csv ./data/processed/fin/places.csv
+COPY data/processed/fin/place_opening_hours.csv ./data/processed/fin/place_opening_hours.csv
 COPY data/processed/merchants.csv ./data/processed/merchants.csv
 COPY data/raw/dongbaekjeon/2026_부산의맛_식당목록.csv ./data/raw/dongbaekjeon/2026_부산의맛_식당목록.csv
 COPY --from=frontend /build/frontend/dist/ ./frontend/dist/

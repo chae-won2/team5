@@ -10,6 +10,7 @@
 !data/processed/
 !data/processed/fin/
 !data/processed/fin/places.csv
+!data/processed/fin/place_opening_hours.csv
 !data/processed/merchants.csv
 !data/raw/
 !data/raw/dongbaekjeon/

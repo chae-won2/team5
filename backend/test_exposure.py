@@ -108,15 +108,16 @@ class ExposureTests(unittest.TestCase):
 
     @patch('app.services.route.walking_leg')
     def test_next_route_rotates_without_mutating_fixed_stops(self, walk):
-        # All three tourist places remain feasible; fixed prefix is excluded.
-        base={**load_places().iloc[0].to_dict(),'category':'관광명소','duration_min':30}
+        # All three merchants remain feasible; fixed prefix is excluded. Uses a merchant
+        # category because exposure rotation does not apply to 관광명소 (route.py).
+        base={**load_places().iloc[0].to_dict(),'category':'식당','duration_min':30}
         import pandas as pd
         catalog=pd.DataFrame([{**base,'id':i,'lat':35.101+k*.001} for k,i in enumerate(['a','b','c','d'])])
         walk.return_value={'leg_minutes':5,'leg_seconds':300,'leg_path':[],'leg_distance_m':300}
         fixed=[catalog.iloc[0].to_dict()]
-        first=next_places(catalog,35.1,129.03,fixed,'관광명소',180)
+        first=next_places(catalog,35.1,129.03,fixed,'식당',180)
         acknowledge(issue(first['alternatives']))
-        second=next_places(catalog,35.1,129.03,fixed,'관광명소',180)
+        second=next_places(catalog,35.1,129.03,fixed,'식당',180)
         self.assertEqual([p['id'] for p in second['stops']],['a'])
         self.assertNotEqual(first['alternatives'][0]['id'],second['alternatives'][0]['id'])
         self.assertTrue(all(p['projected_total_minutes']<=180 and p['leg_seconds']<=1200 for p in second['alternatives']))
@@ -124,11 +125,12 @@ class ExposureTests(unittest.TestCase):
     @patch('app.services.route.walking_leg')
     def test_api_issues_list_then_acknowledges_once(self, walk):
         import pandas as pd
-        base={**load_places().iloc[0].to_dict(),'category':'관광명소','duration_min':30}
+        # Uses a merchant category because exposure rotation does not apply to 관광명소.
+        base={**load_places().iloc[0].to_dict(),'category':'식당','duration_min':30}
         catalog=pd.DataFrame([{**base,'id':i,'lat':35.101+k*.001} for k,i in enumerate(['a','b','c','d'])])
         walk.return_value={'leg_minutes':5,'leg_seconds':300,'leg_path':[],'leg_distance_m':300}
         client=TestClient(app)
-        body={'start_lat':35.1,'start_lon':129.03,'category':'관광명소','max_minutes':180}
+        body={'start_lat':35.1,'start_lon':129.03,'category':'식당','max_minutes':180}
         with patch('app.routers.recommend.load_places',return_value=catalog):
             response=client.post('/api/recommend/next',json=body)
             self.assertEqual(response.status_code,200)

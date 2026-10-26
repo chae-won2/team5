@@ -236,7 +236,11 @@ def next_places(catalog, start_lat, start_lon, stops, category=None, max_minutes
             "projected_total_minutes": total,
             "over_budget": seconds > max_minutes * 60})
     # shortcut: rotate within the existing nearest-20 pool, not the entire catalog.
+    # Exposure rotation is a 동백전 가맹점 fairness mechanism; attractions stay in distance order.
     fitting = [p for p in result["alternatives"] if not p["over_budget"]]
     overruns = [p for p in result["alternatives"] if p["over_budget"]]
-    result["alternatives"] = (rotate(fitting) + rotate(overruns))[:3]
+    if category == "관광명소":
+        result["alternatives"] = (fitting + overruns)[:3]
+    else:
+        result["alternatives"] = (rotate(fitting) + rotate(overruns))[:3]
     return result

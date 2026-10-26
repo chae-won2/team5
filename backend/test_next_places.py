@@ -100,6 +100,20 @@ class NextPlaceTests(unittest.TestCase):
         result = next_places(self.catalog, 35.1, 129.03, [], "카페/디저트", 180)
         self.assertEqual(result["alternatives"][0]["opening_status"], "unknown")
 
+    @patch("app.services.route.walking_leg")
+    @patch("app.services.route.rotate", side_effect=lambda places: list(reversed(places)))
+    def test_attractions_skip_exposure_rotation_but_merchants_use_it(self, rotate, walk):
+        walk.return_value = {"leg_minutes": 5, "leg_seconds": 300, "leg_path": [], "leg_distance_m": 300}
+        attractions = [{**self.rows[0], "id": f"spot{i}", "lat": 35.101 + i * .001} for i in range(3)]
+        result = next_places(pd.DataFrame(attractions), 35.1, 129.03, [], "관광명소", 180)
+        self.assertEqual([p["id"] for p in result["alternatives"]], ["spot0", "spot1", "spot2"])
+        rotate.assert_not_called()
+
+        cafes = [{**self.rows[1], "id": f"cafe{i}", "lat": 35.101 + i * .001} for i in range(3)]
+        result = next_places(pd.DataFrame(cafes), 35.1, 129.03, [], "카페/디저트", 180)
+        self.assertEqual([p["id"] for p in result["alternatives"]], ["cafe2", "cafe1", "cafe0"])
+        rotate.assert_called()
+
     def test_invalid_ids_and_category_rejected(self):
         client=TestClient(app); base={"start_lat":35.1,"start_lon":129.03}
         for change in [{"stop_ids":["missing"]},{"stop_ids":["same","same"]},{"category":"unknown"}]:

@@ -8,7 +8,8 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1] / "data/processed"
-OUT = ROOT / "travel_purposes"
+ROOT_BIN = ROOT / "bin"
+OUT = ROOT_BIN / "travel_purposes"
 
 
 def key(value):
@@ -72,7 +73,7 @@ def main():
     assert key("본죽(서면점)") != key("본죽(해운대점)")
     output.mkdir(parents=True, exist_ok=True)
     m = pd.read_csv(ROOT / "merchants.csv").fillna("")
-    k = pd.read_csv(ROOT / "_kakao_category_cache.csv").fillna("").drop_duplicates("id", keep="last")
+    k = pd.read_csv(ROOT_BIN / "_kakao_category_cache.csv").fillna("").drop_duplicates("id", keep="last")
     rematched = {}
     category_records = k
     if args.rematch_file:
@@ -80,7 +81,7 @@ def main():
         accepted = rematch[rematch.status.eq("accepted")]
         rematched = accepted.set_index("id").to_dict("index")
         category_records = pd.concat([k, accepted.assign(status="ok")], ignore_index=True).drop_duplicates("id", keep="last")
-    raw_path = sorted((ROOT.parent / "raw/sangga").glob("*.csv"))[-1]
+    raw_path = sorted((ROOT.parent / "raw/bin/sangga").glob("*.csv"))[-1]
     columns = {"상호명": "name", "지점명": "branch", "상권업종대분류명": "category_major",
                "상권업종소분류명": "category_minor", "도로명주소": "address", "경도": "lon", "위도": "lat"}
     s = pd.read_csv(raw_path, usecols=list(columns), encoding="utf-8-sig").rename(columns=columns).fillna("")

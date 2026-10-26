@@ -1,5 +1,5 @@
 """한국관광공사 TourAPI(KorService2)에서 부산 지역 관광지/음식점 데이터를 받아
-data/raw/tourapi/ 에 원본 CSV로 저장한다.
+data/raw/bin/tourapi/ 에 원본 CSV로 저장한다.
 
 contentTypeId: 12=관광지, 39=음식점
 areaCode: 6=부산
@@ -18,7 +18,7 @@ load_dotenv()
 BASE_URL = "http://apis.data.go.kr/B551011/KorService2/areaBasedList2"
 SERVICE_KEY = os.environ["TOURAPI_SERVICE_KEY"]
 AREA_CODE = 6  # 부산
-OUT_DIR = "data/raw/tourapi"
+OUT_DIR = "data/raw/bin/tourapi"
 
 CONTENT_TYPES = {
     "12": "관광지",

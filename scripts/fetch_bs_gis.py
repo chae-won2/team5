@@ -1,5 +1,5 @@
 """bs.webasp.kr (부산광역시 생활데이터 상황판)의 비공개(인증 불필요) API를 호출해서
-카드 소비 데이터(동 단위, 업종별)를 data/raw/tour_consumption/ 에 CSV로 저장한다.
+카드 소비 데이터(동 단위, 업종별)를 data/raw/bin/tour_consumption/ 에 CSV로 저장한다.
 
 API: POST https://bs.webasp.kr/api/gis
 layerType: "csm" (카드소비)
@@ -33,7 +33,7 @@ CATEGORY_LABELS = {
     "9": "교육", "10": "생활", "11": "자동차",
 }
 
-OUT_TOUR_CONSUMPTION = "data/raw/tour_consumption"
+OUT_TOUR_CONSUMPTION = "data/raw/bin/tour_consumption"
 
 
 def call_api(layer_type, region, ym):

@@ -16,7 +16,8 @@ from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data/processed"
-OUT = DATA / "kakao_rematch"
+DATA_BIN = DATA / "bin"
+OUT = DATA_BIN / "kakao_rematch"
 FIELDS = ["id", "status", "place_id", "place_name", "category_group_name", "category_name",
           "road_address", "address", "lat", "lon", "distance_m", "name_similarity",
           "address_match", "query", "radius", "reason"]
@@ -144,11 +145,11 @@ def main():
     load_dotenv(ROOT / ".env")
     headers = {"Authorization": "KakaoAK " + os.environ["KAKAO_REST_API_KEY"]}
     merchants = pd.read_csv(DATA / "merchants.csv")
-    cache = pd.read_csv(DATA / "_kakao_category_cache.csv").drop_duplicates("id", keep="last")
+    cache = pd.read_csv(DATA_BIN / "_kakao_category_cache.csv").drop_duplicates("id", keep="last")
     joined = merchants.merge(cache[["id", "status", "place_name", "category_name"]], on="id", how="left")
     verified_name = pd.Series([len(old_name(n)) >= 2 and old_name(n) == old_name(p) for n, p in zip(joined.name, joined.place_name)], index=joined.index)
     todo = joined[~(joined.status.eq("ok") & verified_name)].copy()
-    classified_path = DATA / "travel_purposes/merchants_travel_purposes.csv"
+    classified_path = DATA_BIN / "travel_purposes/merchants_travel_purposes.csv"
     if classified_path.exists():
         classified = pd.read_csv(classified_path, usecols=["id", "classification_status"])
         unresolved = classified.loc[classified.classification_status.isin(["unmatched", "review"]), "id"]

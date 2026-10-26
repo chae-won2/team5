@@ -19,42 +19,42 @@ def load_merchants() -> pd.DataFrame:
 
 @lru_cache(maxsize=1)
 def load_tourist_spots() -> pd.DataFrame:
-    return pd.read_csv(DATA_DIR / "tourist_spots.csv", encoding="utf-8-sig")
+    return pd.read_csv(DATA_DIR / "bin/tourist_spots.csv", encoding="utf-8-sig")
 
 
 @lru_cache(maxsize=1)
 def load_consumption() -> pd.DataFrame:
-    return pd.read_csv(DATA_DIR / "consumption.csv", encoding="utf-8-sig")
+    return pd.read_csv(DATA_DIR / "bin/consumption.csv", encoding="utf-8-sig")
 
 
 @lru_cache(maxsize=1)
 def load_visitors() -> pd.DataFrame:
-    return pd.read_csv(DATA_DIR / "visitors.csv", encoding="utf-8-sig")
+    return pd.read_csv(DATA_DIR / "bin/visitors.csv", encoding="utf-8-sig")
 
 
 @lru_cache(maxsize=1)
 def load_commercial_density() -> pd.DataFrame:
-    return pd.read_csv(DATA_DIR / "commercial_density.csv", encoding="utf-8-sig")
+    return pd.read_csv(DATA_DIR / "bin/commercial_density.csv", encoding="utf-8-sig")
 
 
 @lru_cache(maxsize=1)
 def load_sangga_points() -> pd.DataFrame:
-    return pd.read_csv(DATA_DIR / "sangga_points.csv", encoding="utf-8-sig")
+    return pd.read_csv(DATA_DIR / "bin/sangga_points.csv", encoding="utf-8-sig")
 
 
 @lru_cache(maxsize=1)
 def load_kakao_categories() -> pd.DataFrame:
-    return pd.read_csv(DATA_DIR / "_kakao_category_cache.csv", encoding="utf-8-sig")
+    return pd.read_csv(DATA_DIR / "bin/_kakao_category_cache.csv", encoding="utf-8-sig")
 
 
 @lru_cache(maxsize=1)
 def load_busan_mat() -> pd.DataFrame:
-    return pd.read_csv(DATA_DIR / "busan_mat.csv", encoding="utf-8-sig")
+    return pd.read_csv(DATA_DIR / "bin/busan_mat.csv", encoding="utf-8-sig")
 
 
 @lru_cache(maxsize=1)
 def load_recommendation_places() -> pd.DataFrame:
-    return pd.read_csv(DATA_DIR / "recommendation_places.csv", encoding="utf-8-sig").fillna("")
+    return pd.read_csv(DATA_DIR / "bin/recommendation_places.csv", encoding="utf-8-sig").fillna("")
 
 
 @lru_cache(maxsize=1)

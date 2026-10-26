@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 MERCHANTS_PATH = "data/processed/merchants.csv"
-CACHE_PATH = "data/processed/_kakao_category_cache.csv"
+CACHE_PATH = "data/processed/bin/_kakao_category_cache.csv"
 
 API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json"
 API_KEY = os.environ["KAKAO_REST_API_KEY"]

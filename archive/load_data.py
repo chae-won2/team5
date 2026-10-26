@@ -1,12 +1,12 @@
-"""data/raw/csv/*.csv 파일들을 모두 읽어 하나로 합쳐 data/processed/merged.csv로 저장."""
+"""data/raw/bin/csv/*.csv 파일들을 모두 읽어 하나로 합쳐 data/processed/bin/merged.csv로 저장."""
 
 import glob
 import os
 
 import pandas as pd
 
-RAW_DIR = "data/raw/csv"
-OUTPUT_PATH = "data/processed/merged.csv"
+RAW_DIR = "data/raw/bin/csv"
+OUTPUT_PATH = "data/processed/bin/merged.csv"
 
 
 def load_raw_files():

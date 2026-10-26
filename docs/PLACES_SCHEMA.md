@@ -1,6 +1,6 @@
 # 통합 Place 데이터 계약
 
-기준: 2026-10-23. 추천 API는 `load_places()`로 `data/processed/fin/places.csv`를 읽습니다. 기준표·검수·출처는 `data/processed/place_support/`에 분리합니다. `data/process`는 사용하지 않습니다.
+기준: 2026-10-23. 추천 API는 `load_places()`로 `data/processed/fin/places.csv`를 읽습니다. 기준표·검수·출처는 `data/processed/bin/place_support/`에 분리합니다. `data/process`는 사용하지 않습니다.
 
 ## 컬럼
 
@@ -69,7 +69,7 @@
 
 ```powershell
 $env:QT_QPA_PLATFORM = "offscreen"
-& "C:/Program Files/QGIS 3.16/bin/python-qgis-ltr.bat" "$PWD/scripts/build_places.py" --shopping-file "$PWD/data/shopping_verification/shopping_places_final.csv" --tourism-file "$PWD/data/processed/mvp_tourist_spots.csv"
+& "C:/Program Files/QGIS 3.16/bin/python-qgis-ltr.bat" "$PWD/scripts/build_places.py" --shopping-file "$PWD/data/shopping_verification/shopping_places_final.csv" --tourism-file "$PWD/data/processed/bin/mvp_tourist_spots.csv"
 ```
 
 쇼핑 선정 ID는 좌표·정규화 상호로 기존 가맹점에 연결하며 최종 출력은 가맹점 ID를 사용합니다. 관광명소는 유형·좌표가 필요하고 행정동은 경계로 판정합니다. 산출물은 서비스 CSV, 출처 CSV, 검수 CSV, `summary.json`입니다. JSON의 과거 호환 필드 `backend_switched`를 현재 배포 상태로 해석하지 마세요.

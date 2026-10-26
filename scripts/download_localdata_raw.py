@@ -2,7 +2,7 @@
 지방행정 인허가데이터(LOCALDATA) 원본 CSV 다운로드 — 부산 원도심 4개 구
 - 인증키 필요 없음, API 호출 한도 없음
 - 받은 파일은 가공하지 않고 그대로 저장 (팀 업로드 규칙: 원본)
-- 저장 위치: data/raw/license_status/YYYYMMDD_인허가_업종_구.csv
+- 저장 위치: data/raw/bin/license_status/YYYYMMDD_인허가_업종_구.csv
 - 레포 루트(team5)에서 실행: python scripts/download_localdata_raw.py
 
 사용법
@@ -29,7 +29,7 @@ UPJONG = {
 # 부산 원도심 4개 구 (동구 3270000은 샘플 페이지에서 확인, 나머지는 코드표로 대조)
 GUGUN = {"중구": "3250000", "서구": "3260000", "동구": "3270000", "영도구": "3280000"}
 
-OUT_DIR = os.path.join("data", "raw", "license_status")  # 레포 루트(team5)에서 실행
+OUT_DIR = os.path.join("data", "raw", "bin", "license_status")  # 레포 루트(team5)에서 실행
 URL = "https://file.localdata.go.kr/file/download/{slug}/info?orgCode={code}"
 HEADERS = {"Referer": "https://file.localdata.go.kr/", "User-Agent": "Mozilla/5.0"}
 

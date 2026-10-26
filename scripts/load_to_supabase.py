@@ -33,6 +33,8 @@ def clean_record(d):
 def load_table(client, table_name):
     path = os.path.join(OUT_DIR, f"{table_name}.csv")
     if not os.path.exists(path):
+        path = os.path.join(OUT_DIR, "bin", f"{table_name}.csv")
+    if not os.path.exists(path):
         print(f"스킵 (파일 없음): {path}")
         return
 

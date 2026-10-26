@@ -1,12 +1,12 @@
 """동백전 가맹점 주소를 Kakao Local API로 지오코딩해서 GIS(GeoJSON) 파일을 만든다.
 
-입력: data/raw/dongbaekjeon/*.csv (가맹점 명 / 주소 / 데이터기준일자)
+입력: data/raw/bin/dongbaekjeon/*.csv (가맹점 명 / 주소 / 데이터기준일자)
 출력:
-  data/processed/dongbaekjeon_geocoded.csv   - 원본 + lon/lat
-  data/processed/dongbaekjeon.geojson        - Point FeatureCollection
-  data/processed/dongbaekjeon_geocode_failed.csv - 매칭 실패 주소 목록
+  data/processed/bin/dongbaekjeon_geocoded.csv   - 원본 + lon/lat
+  data/processed/bin/dongbaekjeon.geojson        - Point FeatureCollection
+  data/processed/bin/dongbaekjeon_geocode_failed.csv - 매칭 실패 주소 목록
 
-주소 단위로 캐시(data/processed/_geocode_cache.csv)를 유지해서, 중간에 끊겨도
+주소 단위로 캐시(data/processed/bin/_geocode_cache.csv)를 유지해서, 중간에 끊겨도
 이어서 돌릴 수 있다.
 """
 
@@ -23,8 +23,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-RAW_DIR = "data/raw/dongbaekjeon"
-OUT_DIR = "data/processed"
+RAW_DIR = "data/raw/bin/dongbaekjeon"
+OUT_DIR = "data/processed/bin"
 CACHE_PATH = os.path.join(OUT_DIR, "_geocode_cache.csv")
 OUT_CSV = os.path.join(OUT_DIR, "dongbaekjeon_geocoded.csv")
 OUT_GEOJSON = os.path.join(OUT_DIR, "dongbaekjeon.geojson")

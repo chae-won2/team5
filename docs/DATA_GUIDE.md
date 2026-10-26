@@ -6,13 +6,16 @@
 
 | 위치 | 역할 |
 |---|---|
-| `data/raw/` | 동백전·상가·TourAPI·시장·공공 지정 등 원천 보관 |
-| `data/processed/fin/places.csv` | 현재 추천 API의 장소 입력 |
-| `data/processed/place_support/` | 체류 기준·출처·업종 검수·관광지 좌표 근거 |
-| `data/processed/GIS/mvp/` | 행정동 4곳의 가맹점·분류 작업 자료 |
-| `data/processed/GIS/boundaries/` | 행정동·시장 상권영역과 출처 |
-| `data/processed/GIS/full_busan/` | 전체 조사 스냅샷. 최신 서비스 명부가 아님 |
-| `data/processed/travel_purposes/` | 여행 목적 분류·후속 매칭·검토 |
+| `data/processed/merchants.csv`, `data/processed/fin/places.csv` | 서빙 입력. 백엔드가 직접 읽는 파일 (`load_merchants()`, `load_places()`) |
+| `data/raw/dongbaekjeon/2026_부산의맛_식당목록.csv` | 서빙 입력. `#부산의맛` 태그 매칭용 원본 |
+| `data/raw/bin/` | 동백전·상가·TourAPI·시장·공공 지정 등 원천 보관. 서빙에는 쓰이지 않고 전처리 스크립트 입력으로만 사용 |
+| `data/processed/bin/place_support/` | 체류 기준·출처·업종 검수·관광지 좌표 근거 |
+| `data/processed/bin/GIS/mvp/` | 행정동 4곳의 가맹점·분류 작업 자료 |
+| `data/processed/bin/GIS/boundaries/` | 행정동·시장 상권영역과 출처 |
+| `data/processed/bin/GIS/full_busan/` | 전체 조사 스냅샷. 최신 서비스 명부가 아님 |
+| `data/processed/bin/travel_purposes/` | 여행 목적 분류·후속 매칭·검토 |
+
+`data/raw/bin/`과 `data/processed/bin/`은 백엔드가 읽지 않는 원천·중간·레거시 산출물을 모아두는 자리다. 전처리 스크립트는 여전히 이 경로를 입력·출력으로 사용하며, 재생성 가능하다는 이유로 git 추적에서 제외하지 않는다.
 | `data/shopping_verification/` | 담당자 선정 쇼핑 입력 |
 | `data/experiments/weights_v01/` | 리뷰 기반 40곳 실험·수동 교체 이력. 운영 미반영 |
 | `data/experiments/weights_400/` | 식당·카페 400곳 엑셀 표본. 리뷰 조건 없음 |
@@ -22,7 +25,7 @@
 
 ## 처리 흐름
 
-동백전 원본 → `scripts/geocode_dongbaekjeon.py`로 좌표 부여 → `scripts/clean_data.py`로 `merchants.csv` 생성 → 카카오/상가 업종 연결·검토 → 행정동·시장 경계 분석 → `scripts/build_places.py`로 승인된 관광·쇼핑과 서비스 CSV 통합.
+동백전 원본(`data/raw/bin/dongbaekjeon/`) → `scripts/geocode_dongbaekjeon.py`로 좌표 부여(`data/processed/bin/`) → `scripts/clean_data.py`로 `merchants.csv` 생성(`data/processed/`) → 카카오/상가 업종 연결·검토 → 행정동·시장 경계 분석 → `scripts/build_places.py`로 승인된 관광·쇼핑과 서비스 CSV 통합(`data/processed/fin/places.csv`).
 
 `scripts/build_mvp_tourism.py`는 선정 관광명소의 좌표 근거·유형을 합쳐 MVP 관광지와 검토 목록을 만듭니다. QGIS 전처리 재생성은 [장소 계약](PLACES_SCHEMA.md)을 따릅니다. 서비스는 원천 API 매칭을 요청마다 반복하지 않습니다.
 

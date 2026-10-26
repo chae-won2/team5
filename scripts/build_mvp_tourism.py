@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def build(root=ROOT):
-    data = root / "data/processed"
+    data = root / "data/processed/bin"
     support = data / "place_support"
     source = root / "data/mvp_tourist_spots/mvp_tourist_spots.csv"
     evidence_file = support / "tourism_coordinate_evidence.csv"

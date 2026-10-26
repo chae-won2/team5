@@ -256,7 +256,7 @@ def build(args):
     assert set(ready).isdisjoint(reviews)
     out = args.output_dir
     out.mkdir(parents=True, exist_ok=True)
-    support = out.parent / "place_support"
+    support = data / "place_support"
     support.mkdir(parents=True, exist_ok=True)
     write_csv(out / "places.csv", list(ready.values()), COLUMNS)
     hours_file = out / "place_opening_hours.csv"
@@ -280,8 +280,8 @@ if __name__ == "__main__":
     import os
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--data-dir", type=Path, default=ROOT / "data/processed")
-    parser.add_argument("--rules-file", type=Path, default=ROOT / "data/processed/place_support/duration_rules.csv")
+    parser.add_argument("--data-dir", type=Path, default=ROOT / "data/processed/bin")
+    parser.add_argument("--rules-file", type=Path, default=ROOT / "data/processed/bin/place_support/duration_rules.csv")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "data/processed/fin")
     parser.add_argument("--shopping-file", type=Path)
     parser.add_argument("--tourism-file", type=Path)

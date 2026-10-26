@@ -137,7 +137,9 @@
     "finishCourse": "이 코스로 완성하기",
     "editCourse": "코스 편집하기",
     "removeStop": "선택 취소",
-    "estimatedSpendPerPerson": "예상지출 1인당 약 {amount}원"
+    "estimatedSpendPerPerson": "예상지출 1인당 약 {amount}원",
+    "paymentUnavailable": "동백전 결제 불가",
+    "paymentUnverified": "동백전 가맹 여부 미확인"
   },
   "en": {
     "appTitle": "Busan walking routes",
@@ -277,7 +279,9 @@
     "finishCourse": "Finish this route",
     "editCourse": "Edit route",
     "removeStop": "Remove",
-    "estimatedSpendPerPerson": "Estimated spend: approx. ₩{amount} per person"
+    "estimatedSpendPerPerson": "Estimated spend: approx. ₩{amount} per person",
+    "paymentUnavailable": "Dongbaekjeon not accepted",
+    "paymentUnverified": "Dongbaekjeon acceptance unverified"
   },
   "ja": {
     "appTitle": "釜山の徒歩コース",
@@ -417,7 +421,9 @@
     "finishCourse": "このコースで完成",
     "editCourse": "コースを編集",
     "removeStop": "選択を取消",
-    "estimatedSpendPerPerson": "予算の目安：1人あたり約₩{amount}"
+    "estimatedSpendPerPerson": "予算の目安：1人あたり約₩{amount}",
+    "paymentUnavailable": "トンベクジョン利用不可",
+    "paymentUnverified": "トンベクジョン加盟未確認"
   },
   "zh-TW": {
     "appTitle": "釜山步行路線",
@@ -557,6 +563,8 @@
     "finishCourse": "完成這條路線",
     "editCourse": "編輯路線",
     "removeStop": "取消選擇",
-    "estimatedSpendPerPerson": "預估消費：每人約 ₩{amount}"
+    "estimatedSpendPerPerson": "預估消費：每人約 ₩{amount}",
+    "paymentUnavailable": "不接受東柏錢付款",
+    "paymentUnverified": "東柏錢特約商店資格未確認"
   }
 }

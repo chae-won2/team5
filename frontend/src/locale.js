@@ -27,3 +27,9 @@ export function formatEstimatedSpend(locale, value) {
   });
 }
 export { resources };
+
+export function paymentTagKey(status) {
+  if (status === "merchant_listed") return "paymentTag";
+  if (status === "not_accepted") return "paymentUnavailable";
+  return "paymentUnverified";
+}

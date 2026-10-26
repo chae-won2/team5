@@ -41,7 +41,7 @@ export default function NextPlacePicker({ categories, selectedCategories, active
         <EstimatedSpend amount={place.estimated_spend} />
         <span className="result-address">{t("afterAdding", { time: approx(place.projected_total_minutes) })}</span>
         {place.over_budget && <span className="candidate-time-warning">{t("timeOverrun", { limit: approx(maxMinutes), extra: approx(Math.round((place.projected_total_minutes - maxMinutes) * 10) / 10) })}</span>}
-        <span className="candidate-tags"><span className={place.payment_status === "merchant_listed" ? "payment-tag" : "payment-tag payment-tag-neutral"}>{t(paymentTagKey(place.payment_status))}</span>{place.is_busan_taste && <span className="taste-tag">{t("tasteTag")}</span>}</span>
+        <span className="candidate-tags"><span className={place.payment_status === "merchant_listed" ? "payment-tag" : "payment-tag payment-tag-neutral"}>{t(paymentTagKey(place.payment_status))}</span>{place.is_busan_taste && <span className="taste-tag">{t("tasteTag")}</span>}{place.opening_status === "open" && <span className="open-tag">{t("openNow")}</span>}{place.opening_status === "closed" && <span className="closed-tag">{t("closedNow")}</span>}</span>
         <span className="confirm-place">{t("confirmPlace", { n: stops.length + 1 })}</span>
       </button></li>)}</ul> : <p className="source-note">{t("noNextPlaces")}</p>)}
     </div>

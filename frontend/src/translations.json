@@ -140,13 +140,17 @@
     "estimatedSpendPerPerson": "예상지출 1인당 약 {amount}원",
     "paymentUnavailable": "동백전 결제 불가",
     "paymentUnverified": "동백전 가맹 여부 미확인",
+    "departureDate": "출발 날짜 (한국시간)",
+    "departureDateHint": "선택한 날짜·시각 기준으로 영업중 여부를 함께 보여드려요.",
     "departureTime": "출발 시각 (한국시간 · 선택)",
     "automaticDeparture": "자동으로 설정",
     "departureHint": "선택하지 않으면 코스 완성 시각을 출발 시각으로 사용해요.",
     "departureAt": "출발 {time}",
     "departurePreview": "예상 출발 {time} · 코스 완성 시 확정",
     "completionTimeBasis": "코스를 완성한 시각 기준",
-    "nextDayTime": "익일 {time}"
+    "nextDayTime": "익일 {time}",
+    "openNow": "영업중",
+    "closedNow": "영업시간 아님"
   },
   "en": {
     "appTitle": "Busan walking routes",
@@ -289,13 +293,17 @@
     "estimatedSpendPerPerson": "Estimated spend: approx. ₩{amount} per person",
     "paymentUnavailable": "Dongbaekjeon not accepted",
     "paymentUnverified": "Dongbaekjeon acceptance unverified",
+    "departureDate": "Departure date (Korea time)",
+    "departureDateHint": "We show open/closed status based on the selected date and time.",
     "departureTime": "Departure time (Korea time · optional)",
     "automaticDeparture": "Set automatically",
     "departureHint": "Leave blank to start at the time you finish planning.",
     "departureAt": "Departure {time}",
     "departurePreview": "Estimated departure {time} · set when you finish planning",
     "completionTimeBasis": "Based on when you finished planning",
-    "nextDayTime": "Next day {time}"
+    "nextDayTime": "Next day {time}",
+    "openNow": "Open",
+    "closedNow": "Outside business hours"
   },
   "ja": {
     "appTitle": "釜山の徒歩コース",
@@ -438,13 +446,17 @@
     "estimatedSpendPerPerson": "予算の目安：1人あたり約₩{amount}",
     "paymentUnavailable": "トンベクジョン利用不可",
     "paymentUnverified": "トンベクジョン加盟未確認",
+    "departureDate": "出発日（韓国時間）",
+    "departureDateHint": "選択した日付・時刻をもとに営業状況を表示します。",
     "departureTime": "出発時刻（韓国時間・任意）",
     "automaticDeparture": "自動設定",
     "departureHint": "未設定の場合、コースを完成した時刻を出発時刻にします。",
     "departureAt": "出発 {time}",
     "departurePreview": "出発予定 {time}・コース完成時に確定",
     "completionTimeBasis": "コース完成時刻を基準",
-    "nextDayTime": "翌日 {time}"
+    "nextDayTime": "翌日 {time}",
+    "openNow": "営業中",
+    "closedNow": "営業時間外"
   },
   "zh-TW": {
     "appTitle": "釜山步行路線",
@@ -587,12 +599,16 @@
     "estimatedSpendPerPerson": "預估消費：每人約 ₩{amount}",
     "paymentUnavailable": "不接受東柏錢付款",
     "paymentUnverified": "東柏錢特約商店資格未確認",
+    "departureDate": "出發日期（韓國時間）",
+    "departureDateHint": "依選擇的日期・時間顯示營業狀態。",
     "departureTime": "出發時間（韓國時間・選填）",
     "automaticDeparture": "自動設定",
     "departureHint": "未選擇時，以完成行程的時間作為出發時間。",
     "departureAt": "出發 {time}",
     "departurePreview": "預計出發 {time}・完成行程時確定",
     "completionTimeBasis": "以完成行程的時間為準",
-    "nextDayTime": "翌日 {time}"
+    "nextDayTime": "翌日 {time}",
+    "openNow": "營業中",
+    "closedNow": "非營業時間"
   }
 }

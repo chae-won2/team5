@@ -1,4 +1,4 @@
-import { busanClock, validDepartureTime } from "./schedule.js";
+import { busanClock, busanDate, validDepartureTime, validDepartureDate } from "./schedule.js";
 import { useI18n } from "./i18n.js";
 import { useEffect, useState } from "react";
 import FilterPanel from "./components/FilterPanel";
@@ -17,6 +17,7 @@ export default function App() {
   const [allCategories, setAllCategories] = useState([]);
   const [categories, setCategories] = useState([]);
   const [returnToStart, setReturnToStart] = useState(false);
+  const [departureDate, setDepartureDate] = useState(busanDate());
   const [departureTime, setDepartureTime] = useState("");
   const [scheduleStart, setScheduleStart] = useState("");
   const [building, setBuilding] = useState(false);
@@ -48,12 +49,14 @@ export default function App() {
     const lat = Number(origin[0]), lon = Number(origin[1]);
     const minutes = Number(params.get("minutes"));
     const departure = params.get("depart") || "";
+    const dateParam = params.get("date") || "";
+    const date = validDepartureDate(dateParam) ? dateParam : busanDate();
     if ((departure && !validDepartureTime(departure)) || origin.length !== 2 || origin.some((v) => !v.trim()) || !Number.isFinite(lat) || !Number.isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180 || !Number.isInteger(minutes) || minutes < 30 || minutes > 360 || ids.length > 24 || new Set(ids).size !== ids.length) {
       setError("sharedRouteError");
       return;
     }
     const point = { lat, lon, label: params.get("label") || "" };
-    const conditions = { startPoint: point, maxMinutes: minutes, returnToStart: params.get("return") === "1", categories: [], departureTime: departure };
+    const conditions = { startPoint: point, maxMinutes: minutes, returnToStart: params.get("return") === "1", categories: [], departureDate: date, departureTime: departure };
     setLoading(true);
     getNextPlaces({ ...conditions, stops: ids.map((id) => ({ id })), category: null })
       .then((data) => {
@@ -62,6 +65,7 @@ export default function App() {
         setMaxMinutes(minutes);
         setReturnToStart(conditions.returnToStart);
         setAppliedConditions(conditions);
+        setDepartureDate(date);
         setDepartureTime(departure);
         setScheduleStart(departure || busanClock());
         setHasSearched(true);
@@ -90,7 +94,7 @@ export default function App() {
 
   function handleSubmit() {
     if (!startPoint || loading) return;
-    const conditions = { startPoint, maxMinutes, returnToStart, categories: [...categories], departureTime };
+    const conditions = { startPoint, maxMinutes, returnToStart, categories: [...categories], departureDate, departureTime };
     setAppliedConditions(conditions);
     setScheduleStart(departureTime || busanClock());
     applyRoute({ stops: [], total_minutes: 0, over_budget: false });
@@ -138,6 +142,7 @@ export default function App() {
               categories={categories} toggleCategory={toggleCategory}
               returnToStart={returnToStart} setReturnToStart={setReturnToStart}
               maxMinutes={maxMinutes} setMaxMinutes={setMaxMinutes}
+              departureDate={departureDate} setDepartureDate={setDepartureDate}
               departureTime={departureTime} setDepartureTime={setDepartureTime}
               onSubmit={handleSubmit} loading={loading}
               collapsed={phase === "result"}

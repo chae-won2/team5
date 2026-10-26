@@ -58,6 +58,11 @@ def load_recommendation_places() -> pd.DataFrame:
 
 
 @lru_cache(maxsize=1)
+def load_opening_hours() -> pd.DataFrame:
+    return pd.read_csv(DATA_DIR / "fin/place_opening_hours.csv", encoding="utf-8-sig", dtype={"place_id": str})
+
+
+@lru_cache(maxsize=1)
 def load_places() -> pd.DataFrame:
     """Read the service catalog and attach verified display tags."""
     import math

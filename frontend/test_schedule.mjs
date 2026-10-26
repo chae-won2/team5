@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildSchedule, formatScheduleRange, validDepartureTime, busanClock } from './src/schedule.js';
+import { buildSchedule, formatScheduleRange, validDepartureTime, busanClock, busanDate, validDepartureDate } from './src/schedule.js';
 
 test('walking, visits and return use one continuous departure-based timeline', () => {
   const stops = [{ leg_minutes: 5, duration_min: 60 }, { leg_minutes: 10, duration_min: 30 }];
@@ -30,5 +30,14 @@ test('automatic time uses Korea time and invalid clocks cannot produce a schedul
   for (const value of ['', null, undefined, '24:00','10:60','9:00','10:00\n']) {
     assert.equal(validDepartureTime(value), false);
     assert.equal(buildSchedule([], value), null);
+  }
+});
+
+test('busanDate reflects the Korea calendar day, including around UTC midnight', () => {
+  assert.equal(busanDate(new Date('2026-10-26T14:59:00Z')), '2026-10-26');
+  assert.equal(busanDate(new Date('2026-10-26T15:00:00Z')), '2026-10-27');
+  assert.equal(validDepartureDate('2026-10-26'), true);
+  for (const value of ['', null, undefined, '2026-10-6', '2026-13-01', '2026-02-30', '26-10-26']) {
+    assert.equal(validDepartureDate(value), false);
   }
 });

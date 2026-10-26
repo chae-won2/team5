@@ -10,9 +10,12 @@ from app.data_loader import load_places
 from app.services.route import recommend_route, recalculate_route, next_places, RouteConstraintError
 from app.services.walking import WalkingError
 from app.services.exposure import issue, acknowledge, ExposureStorageError
+from app.services.opening_hours import resolve_context
 
 router = APIRouter(prefix="/api/recommend", tags=["recommend"])
 logger = logging.getLogger("recommend")
+TIME_PATTERN = r"^(?:[01][0-9]|2[0-3]):[0-5][0-9]$"
+DATE_PATTERN = r"^\d{4}-\d{2}-\d{2}$"
 
 
 class RecommendRequest(BaseModel):
@@ -39,6 +42,8 @@ class NextPlaceRequest(BaseModel):
     max_minutes: int = Field(default=90, ge=30, le=360)
     stop_ids: List[str] = Field(default_factory=list, max_length=24)
     category: Optional[Literal["식당", "카페/디저트", "카페·디저트", "관광명소", "쇼핑"]] = None
+    departure_date: Optional[str] = Field(default=None, pattern=DATE_PATTERN)
+    departure_time: Optional[str] = Field(default=None, pattern=TIME_PATTERN)
 
 
 @router.post("/next")
@@ -47,10 +52,14 @@ def recommend_next(req: NextPlaceRequest):
     indexed = catalog.set_index("id")
     if len(set(req.stop_ids)) != len(req.stop_ids) or any(i not in indexed.index for i in req.stop_ids):
         raise HTTPException(422, "유효한 장소 ID를 중복 없이 선택해주세요.")
-    from app.services.route import _place_fields
-    stops = [_place_fields({**indexed.loc[i].to_dict(), "id": i}) for i in req.stop_ids]
     try:
-        result = next_places(catalog, req.start_lat, req.start_lon, stops, req.category, req.max_minutes, req.return_to_start, record_candidates=True)
+        opening = resolve_context(req.departure_date, req.departure_time)
+    except ValueError:
+        raise HTTPException(422, "유효한 출발 날짜가 아니에요.") from None
+    from app.services.route import _place_fields
+    stops = [_place_fields({**indexed.loc[i].to_dict(), "id": i}, opening) for i in req.stop_ids]
+    try:
+        result = next_places(catalog, req.start_lat, req.start_lon, stops, req.category, req.max_minutes, req.return_to_start, record_candidates=True, opening=opening)
         candidates = result.pop('_candidate_snapshot')
         if req.category:
             result['recommendation_id'] = issue(result['alternatives'], candidates=candidates, policy='rotation',

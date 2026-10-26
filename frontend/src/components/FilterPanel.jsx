@@ -1,6 +1,7 @@
 import { useI18n } from "../i18n.js";
 import { useState } from "react";
 import { searchLocation } from "../api";
+import { busanDate } from "../schedule.js";
 import Icon from "./Icon";
 
 export default function FilterPanel({
@@ -9,6 +10,7 @@ export default function FilterPanel({
   categories, toggleCategory,
   returnToStart, setReturnToStart,
   maxMinutes, setMaxMinutes,
+  departureDate, setDepartureDate,
   departureTime, setDepartureTime,
   onSubmit, loading, collapsed,
 }) {
@@ -71,6 +73,7 @@ export default function FilterPanel({
           <span className="filter-summary-pin"><Icon name="pin" size={15} /> {placeLabel(startPoint)}</span>
           <span className="filter-summary-dot">·</span>
           <span>{minutes(maxMinutes)}</span>
+          {departureDate !== busanDate() && <span>{departureDate}</span>}
           {departureTime && <span>{t("departureAt", { time: departureTime })}</span>}
           <span className="filter-summary-dot">·</span>
           <span>{categories.length ? categories.map((category) => t(category)).join(", ") : t("all")}</span>
@@ -134,6 +137,12 @@ export default function FilterPanel({
           <option value="end">{t("finishLast")}</option><option value="return">{t("returnStart")}</option>
         </select>
         <span className="start-point-hint">{t("radiusHint")}{returnToStart && t("returnHint")}</span>
+      </div>
+
+      <div className="field">
+        <label className="field-title" htmlFor="departure-date">{t("departureDate")}</label>
+        <div className="departure-time-row"><input id="departure-date" type="date" min={busanDate()} value={departureDate} onChange={(e) => setDepartureDate(e.target.value)} /></div>
+        <span className="start-point-hint">{t("departureDateHint")}</span>
       </div>
 
       <div className="field">

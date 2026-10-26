@@ -87,16 +87,20 @@ def load_places() -> pd.DataFrame:
     }
     if not frame.visit_type.map(types).eq(frame.category).all():
         raise ValueError("Invalid Place category/visit_type pair")
-    if not frame.admin_dong.isin(["남포동", "광복동", "부평동", "대청동"]).all():
-        raise ValueError("Place is outside the approved MVP dong")
-    for column in ["lon", "lat", "duration_min", "estimated_spend"]:
+    address_district = frame.address.str.extract(r"부산(?:광역시)?\s+(중구|동구|서구|영도구)\b", expand=False)
+    if address_district.isna().any():
+        raise ValueError("Place is outside the approved old-town districts")
+    if "district" in frame and not frame.district.eq(address_district).all():
+        raise ValueError("Place district/address mismatch")
+    frame["district"] = address_district
+    for column in ["lon", "lat", "duration_min", "estimated_spend", "admission_fee_krw", "admission_fee_weekend_krw"]:
         if column not in frame:
             continue
         frame[column] = pd.to_numeric(frame[column], errors="raise")
         values = frame[column].dropna()
         if not values.map(math.isfinite).all():
             raise ValueError(column + " must be finite")
-        if column in ["duration_min", "estimated_spend"] and (values < 0).any():
+        if column in ["duration_min", "estimated_spend", "admission_fee_krw", "admission_fee_weekend_krw"] and (values < 0).any():
             raise ValueError(column + " must not be negative")
         if column == "duration_min" and (values % 1 != 0).any():
             raise ValueError(column + " must contain whole numbers")
@@ -104,6 +108,10 @@ def load_places() -> pd.DataFrame:
         raise ValueError("duration_min must be positive")
     if not frame.lon.between(-180, 180).all() or not frame.lat.between(-90, 90).all():
         raise ValueError("Invalid Place coordinates")
+    if "admission_fee_status" in frame and not frame.admission_fee_status.isin(["unknown", "free", "paid", "conditional"]).all():
+        raise ValueError("Invalid admission fee status")
+    if not frame.payment_status.isin(["merchant_listed", "not_verified", "not_accepted"]).all():
+        raise ValueError("Invalid payment status")
     for column in frame.columns:
         if column not in ["lon", "lat", "duration_min"]:
             frame[column] = frame[column].astype(object).where(frame[column].notna(), None)

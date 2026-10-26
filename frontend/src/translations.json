@@ -97,7 +97,7 @@
     "privacyBody3": "지도는 OpenStreetMap, 도보 경로는 TMAP을 사용합니다. 지도 제공자에게 지도 조회 요청이, 경로 제공자에게 출발·도착 좌표가 전달됩니다. 장소 검색에는 카카오 로컬 API를 사용합니다.",
     "privacyNote": "서비스에서 사용하는 지도·경로·이메일 정보의 이용 방식을 안내합니다.",
     "confirm": "확인했어요",
-    "busanJunggu": "부산 중구",
+    "busanJunggu": "부산 원도심",
     "walkingMode": "도보 여행",
     "routeStatus": "나의 여행 코스",
     "load1": "주변 장소 탐색 중",
@@ -152,7 +152,10 @@
     "openNow": "영업중",
     "closedNow": "영업시간 아님",
     "romanizedName": "로마자 표기 (자동)",
-    "walkingEstimateNotice": "도보 경로 서비스가 일시적으로 제한되어 이동시간을 직선거리 기반으로 추정했어요. 도보 20분 범위와 일정 시각도 추정 기준이며, 실제 경로·소요시간은 다를 수 있어요."
+    "walkingEstimateNotice": "도보 경로 서비스가 일시적으로 제한되어 이동시간을 직선거리 기반으로 추정했어요. 도보 20분 범위와 일정 시각도 추정 기준이며, 실제 경로·소요시간은 다를 수 있어요.",
+    "admissionFree": "입장료 무료 (부대시설 별도)",
+    "admissionAdult": "성인 기본 입장료 {amount}원 (옵션 별도)",
+    "admissionConfirm": "입장료는 방문일·이용권 조건을 확인해 주세요"
   },
   "en": {
     "appTitle": "Busan walking routes",
@@ -252,7 +255,7 @@
     "privacyBody3": "Maps use OpenStreetMap and walking routes use TMAP. Map requests go to the map provider; starting and destination coordinates go to the routing provider. Place search uses Kakao Local API.",
     "privacyNote": "This explains how map, route and email information is used.",
     "confirm": "Got it",
-    "busanJunggu": "Jung-gu, Busan",
+    "busanJunggu": "Busan Old Town",
     "walkingMode": "Walking",
     "routeStatus": "Your walking route",
     "load1": "Finding nearby places",
@@ -307,7 +310,10 @@
     "openNow": "Open",
     "closedNow": "Outside business hours",
     "romanizedName": "Romanized name (automatic)",
-    "walkingEstimateNotice": "Walking routing is temporarily unavailable. Walking times, the 20-minute range and schedule are estimated from straight-line distances; actual routes and times may differ."
+    "walkingEstimateNotice": "Walking routing is temporarily unavailable. Walking times, the 20-minute range and schedule are estimated from straight-line distances; actual routes and times may differ.",
+    "admissionFree": "Free admission (extras may cost more)",
+    "admissionAdult": "Standard adult admission: ₩{amount} (extras separate)",
+    "admissionConfirm": "Check admission prices and ticket conditions for your visit"
   },
   "ja": {
     "appTitle": "釜山の徒歩コース",
@@ -407,7 +413,7 @@
     "privacyBody3": "地図はOpenStreetMap、徒歩経路はTMAPを利用します。地図提供者に閲覧リクエスト、経路提供者に出発・到着座標を送ります。場所検索にはKakao Local APIを利用します。",
     "privacyNote": "地図・経路・メール情報の利用方法をご案内します。",
     "confirm": "確認しました",
-    "busanJunggu": "釜山・中区",
+    "busanJunggu": "釜山の旧市街",
     "walkingMode": "徒歩旅行",
     "routeStatus": "旅行コース",
     "load1": "周辺の場所を検索中",
@@ -462,7 +468,10 @@
     "openNow": "営業中",
     "closedNow": "営業時間外",
     "romanizedName": "ローマ字表記（自動）",
-    "walkingEstimateNotice": "徒歩経路サービスが一時的に利用できないため、直線距離から移動時間を推定しています。徒歩20分の範囲と予定時刻も推定であり、実際の経路・所要時間とは異なる場合があります。"
+    "walkingEstimateNotice": "徒歩経路サービスが一時的に利用できないため、直線距離から移動時間を推定しています。徒歩20分の範囲と予定時刻も推定であり、実際の経路・所要時間とは異なる場合があります。",
+    "admissionFree": "入場無料（付帯施設は別料金の場合あり）",
+    "admissionAdult": "大人の基本入場料：₩{amount}（オプション別料金）",
+    "admissionConfirm": "訪問日・チケット条件に応じた料金をご確認ください"
   },
   "zh-TW": {
     "appTitle": "釜山步行路線",
@@ -562,7 +571,7 @@
     "privacyBody3": "地圖使用OpenStreetMap，步行路線使用TMAP。地圖查詢會傳送至地圖供應商，出發與抵達座標會傳送至路線供應商。地點搜尋使用Kakao Local API。",
     "privacyNote": "此處說明地圖、路線及電子郵件資料的使用方式。",
     "confirm": "我知道了",
-    "busanJunggu": "釜山中區",
+    "busanJunggu": "釜山原都心",
     "walkingMode": "步行旅遊",
     "routeStatus": "我的行程路線",
     "load1": "正在搜尋附近地點",
@@ -617,6 +626,9 @@
     "openNow": "營業中",
     "closedNow": "非營業時間",
     "romanizedName": "羅馬字標示（自動）",
-    "walkingEstimateNotice": "步行路線服務暫時無法使用，目前依直線距離估算步行時間。20分鐘步行範圍及行程時刻亦為估算，實際路線與所需時間可能不同。"
+    "walkingEstimateNotice": "步行路線服務暫時無法使用，目前依直線距離估算步行時間。20分鐘步行範圍及行程時刻亦為估算，實際路線與所需時間可能不同。",
+    "admissionFree": "免費入場（附屬設施可能另計）",
+    "admissionAdult": "成人基本入場費：₩{amount}（其他項目另計）",
+    "admissionConfirm": "請確認到訪日期及票種適用的入場費"
   }
 }

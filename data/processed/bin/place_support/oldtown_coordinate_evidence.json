@@ -1,0 +1,541 @@
+{
+  "oldtown:750b819accbabcfc": {
+    "name": "부산타워",
+    "query": "부산광역시 중구 용두산길 37-30",
+    "http_status": 200,
+    "response": {
+      "documents": [
+        {
+          "address": {
+            "address_name": "부산 중구 광복동2가 1-2",
+            "b_code": "2611013400",
+            "h_code": "2611057000",
+            "main_address_no": "1",
+            "mountain_yn": "N",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "중구",
+            "region_3depth_h_name": "광복동",
+            "region_3depth_name": "광복동2가",
+            "sub_address_no": "2",
+            "x": "129.032334998525",
+            "y": "35.1011540109639"
+          },
+          "address_name": "부산 중구 용두산길 37-30",
+          "address_type": "ROAD_ADDR",
+          "road_address": {
+            "address_name": "부산 중구 용두산길 37-30",
+            "building_name": "용두산공원",
+            "main_building_no": "37",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "중구",
+            "region_3depth_name": "광복동2가",
+            "road_name": "용두산길",
+            "sub_building_no": "30",
+            "underground_yn": "N",
+            "x": "129.032334998525",
+            "y": "35.1011540109639",
+            "zone_no": "48950"
+          },
+          "x": "129.032334998525",
+          "y": "35.1011540109639"
+        }
+      ],
+      "meta": {
+        "is_end": true,
+        "pageable_count": 1,
+        "total_count": 1
+      }
+    },
+    "checked_at": "2026-10-26"
+  },
+  "oldtown:36d05b4431dd8645": {
+    "name": "부산근현대역사관 별관",
+    "query": "부산광역시 중구 대청로 104",
+    "http_status": 200,
+    "response": {
+      "documents": [
+        {
+          "address": {
+            "address_name": "부산 중구 대청동2가 24-2",
+            "b_code": "2611011700",
+            "h_code": "2611053000",
+            "main_address_no": "24",
+            "mountain_yn": "N",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "중구",
+            "region_3depth_h_name": "대청동",
+            "region_3depth_name": "대청동2가",
+            "sub_address_no": "2",
+            "x": "129.03115952083",
+            "y": "35.1026705690456"
+          },
+          "address_name": "부산 중구 대청로 104",
+          "address_type": "ROAD_ADDR",
+          "road_address": {
+            "address_name": "부산 중구 대청로 104",
+            "building_name": "부산근현대역사관 별관",
+            "main_building_no": "104",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "중구",
+            "region_3depth_name": "대청동2가",
+            "road_name": "대청로",
+            "sub_building_no": "",
+            "underground_yn": "N",
+            "x": "129.03115952083",
+            "y": "35.1026705690456",
+            "zone_no": "48949"
+          },
+          "x": "129.03115952083",
+          "y": "35.1026705690456"
+        }
+      ],
+      "meta": {
+        "is_end": true,
+        "pageable_count": 1,
+        "total_count": 1
+      }
+    },
+    "checked_at": "2026-10-26"
+  },
+  "oldtown:009126319fbf48cd": {
+    "name": "유라리광장",
+    "query": "부산광역시 중구 용미길9번길 6-45",
+    "http_status": 200,
+    "response": {
+      "documents": [
+        {
+          "address": {
+            "address_name": "부산 중구 남포동1가 79-2",
+            "b_code": "2611013600",
+            "h_code": "2611058000",
+            "main_address_no": "79",
+            "mountain_yn": "N",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "중구",
+            "region_3depth_h_name": "남포동",
+            "region_3depth_name": "남포동1가",
+            "sub_address_no": "2",
+            "x": "129.035878770944",
+            "y": "35.0964520414408"
+          },
+          "address_name": "부산 중구 용미길9번길 6-45",
+          "address_type": "ROAD_ADDR",
+          "road_address": {
+            "address_name": "부산 중구 용미길9번길 6-45",
+            "building_name": "",
+            "main_building_no": "6",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "중구",
+            "region_3depth_name": "남포동1가",
+            "road_name": "용미길9번길",
+            "sub_building_no": "45",
+            "underground_yn": "N",
+            "x": "129.035878770944",
+            "y": "35.0964520414408",
+            "zone_no": "48984"
+          },
+          "x": "129.035878770944",
+          "y": "35.0964520414408"
+        }
+      ],
+      "meta": {
+        "is_end": true,
+        "pageable_count": 1,
+        "total_count": 1
+      }
+    },
+    "checked_at": "2026-10-26"
+  },
+  "oldtown:59d1e3b32d48531a": {
+    "name": "168계단",
+    "query": "부산광역시 동구 영초길197번길 9",
+    "http_status": 200,
+    "response": {
+      "documents": [
+        {
+          "address": {
+            "address_name": "부산 동구 초량동 994-537",
+            "b_code": "2617010100",
+            "h_code": "2617051000",
+            "main_address_no": "994",
+            "mountain_yn": "N",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "동구",
+            "region_3depth_h_name": "초량1동",
+            "region_3depth_name": "초량동",
+            "sub_address_no": "537",
+            "x": "129.035390798811",
+            "y": "35.1174688432267"
+          },
+          "address_name": "부산 동구 영초길197번길 9",
+          "address_type": "ROAD_ADDR",
+          "road_address": {
+            "address_name": "부산 동구 영초길197번길 9",
+            "building_name": "",
+            "main_building_no": "9",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "동구",
+            "region_3depth_name": "초량동",
+            "road_name": "영초길197번길",
+            "sub_building_no": "",
+            "underground_yn": "N",
+            "x": "129.035390798811",
+            "y": "35.1174688432267",
+            "zone_no": "48808"
+          },
+          "x": "129.035390798811",
+          "y": "35.1174688432267"
+        }
+      ],
+      "meta": {
+        "is_end": true,
+        "pageable_count": 1,
+        "total_count": 1
+      }
+    },
+    "checked_at": "2026-10-26"
+  },
+  "oldtown:a4f4aa90bf9dfab9": {
+    "name": "롯데백화점 광복점",
+    "query": "부산광역시 중구 중앙대로 2",
+    "http_status": 200,
+    "response": {
+      "documents": [
+        {
+          "address": {
+            "address_name": "부산 중구 중앙동7가 20-1",
+            "b_code": "2611011000",
+            "h_code": "2611051000",
+            "main_address_no": "20",
+            "mountain_yn": "N",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "중구",
+            "region_3depth_h_name": "중앙동",
+            "region_3depth_name": "중앙동7가",
+            "sub_address_no": "1",
+            "x": "129.036632251021",
+            "y": "35.0979848964696"
+          },
+          "address_name": "부산 중구 중앙대로 2",
+          "address_type": "ROAD_ADDR",
+          "road_address": {
+            "address_name": "부산 중구 중앙대로 2",
+            "building_name": "롯데백화점광복점",
+            "main_building_no": "2",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "중구",
+            "region_3depth_name": "중앙동7가",
+            "road_name": "중앙대로",
+            "sub_building_no": "",
+            "underground_yn": "N",
+            "x": "129.036632251021",
+            "y": "35.0979848964696",
+            "zone_no": "48944"
+          },
+          "x": "129.036632251021",
+          "y": "35.0979848964696"
+        }
+      ],
+      "meta": {
+        "is_end": true,
+        "pageable_count": 1,
+        "total_count": 1
+      }
+    },
+    "checked_at": "2026-10-26"
+  },
+  "oldtown:c95185e9524e7867": {
+    "name": "송도용궁구름다리",
+    "query": "부산광역시 서구 암남공원로 179-20",
+    "http_status": 200,
+    "response": {
+      "documents": [
+        {
+          "address": {
+            "address_name": "부산 서구 암남동 산 193",
+            "b_code": "2614012400",
+            "h_code": "2614068000",
+            "main_address_no": "193",
+            "mountain_yn": "Y",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "서구",
+            "region_3depth_h_name": "암남동",
+            "region_3depth_name": "암남동",
+            "sub_address_no": "",
+            "x": "129.021555164588",
+            "y": "35.0619747548652"
+          },
+          "address_name": "부산 서구 암남공원로 179-20",
+          "address_type": "ROAD_ADDR",
+          "road_address": {
+            "address_name": "부산 서구 암남공원로 179-20",
+            "building_name": "송도용궁구름다리",
+            "main_building_no": "179",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "서구",
+            "region_3depth_name": "암남동",
+            "road_name": "암남공원로",
+            "sub_building_no": "20",
+            "underground_yn": "N",
+            "x": "129.021555164588",
+            "y": "35.0619747548652",
+            "zone_no": "49276"
+          },
+          "x": "129.021555164588",
+          "y": "35.0619747548652"
+        }
+      ],
+      "meta": {
+        "is_end": true,
+        "pageable_count": 1,
+        "total_count": 1
+      }
+    },
+    "checked_at": "2026-10-26"
+  },
+  "oldtown:323307ae13f395d3": {
+    "name": "송도해상케이블카",
+    "query": "부산광역시 서구 송도해변로 171",
+    "http_status": 200,
+    "response": {
+      "documents": [
+        {
+          "address": {
+            "address_name": "부산 서구 암남동 765",
+            "b_code": "2614012400",
+            "h_code": "2614068000",
+            "main_address_no": "765",
+            "mountain_yn": "N",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "서구",
+            "region_3depth_h_name": "암남동",
+            "region_3depth_name": "암남동",
+            "sub_address_no": "",
+            "x": "129.023398584644",
+            "y": "35.0766433441406"
+          },
+          "address_name": "부산 서구 송도해변로 171",
+          "address_type": "ROAD_ADDR",
+          "road_address": {
+            "address_name": "부산 서구 송도해변로 171",
+            "building_name": "송도케이블카 하부정류장",
+            "main_building_no": "171",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "서구",
+            "region_3depth_name": "암남동",
+            "road_name": "송도해변로",
+            "sub_building_no": "",
+            "underground_yn": "N",
+            "x": "129.023398584644",
+            "y": "35.0766433441406",
+            "zone_no": "49269"
+          },
+          "x": "129.023398584644",
+          "y": "35.0766433441406"
+        }
+      ],
+      "meta": {
+        "is_end": true,
+        "pageable_count": 1,
+        "total_count": 1
+      }
+    },
+    "checked_at": "2026-10-26"
+  },
+  "oldtown:d6be1667c839fa2c": {
+    "name": "임시수도기념관",
+    "query": "부산광역시 서구 임시수도기념로 45",
+    "http_status": 200,
+    "response": {
+      "documents": [
+        {
+          "address": {
+            "address_name": "부산 서구 부민동3가 22",
+            "b_code": "2614011100",
+            "h_code": "2614059000",
+            "main_address_no": "22",
+            "mountain_yn": "N",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "서구",
+            "region_3depth_h_name": "부민동",
+            "region_3depth_name": "부민동3가",
+            "sub_address_no": "",
+            "x": "129.017596444392",
+            "y": "35.1037500036539"
+          },
+          "address_name": "부산 서구 임시수도기념로 45",
+          "address_type": "ROAD_ADDR",
+          "road_address": {
+            "address_name": "부산 서구 임시수도기념로 45",
+            "building_name": "임시수도기념관",
+            "main_building_no": "45",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "서구",
+            "region_3depth_name": "부민동3가",
+            "road_name": "임시수도기념로",
+            "sub_building_no": "",
+            "underground_yn": "N",
+            "x": "129.017596444392",
+            "y": "35.1037500036539",
+            "zone_no": "49236"
+          },
+          "x": "129.017596444392",
+          "y": "35.1037500036539"
+        }
+      ],
+      "meta": {
+        "is_end": true,
+        "pageable_count": 1,
+        "total_count": 1
+      }
+    },
+    "checked_at": "2026-10-26"
+  },
+  "oldtown:74f8d67e7e41c323": {
+    "name": "국립해양박물관",
+    "query": "부산광역시 영도구 해양로301번길 45",
+    "http_status": 200,
+    "response": {
+      "documents": [
+        {
+          "address": {
+            "address_name": "부산 영도구 동삼동 1156",
+            "b_code": "2620012100",
+            "h_code": "2620065000",
+            "main_address_no": "1156",
+            "mountain_yn": "N",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "영도구",
+            "region_3depth_h_name": "동삼1동",
+            "region_3depth_name": "동삼동",
+            "sub_address_no": "",
+            "x": "129.080244864532",
+            "y": "35.0785634152872"
+          },
+          "address_name": "부산 영도구 해양로301번길 45",
+          "address_type": "ROAD_ADDR",
+          "road_address": {
+            "address_name": "부산 영도구 해양로301번길 45",
+            "building_name": "국립해양박물관",
+            "main_building_no": "45",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "영도구",
+            "region_3depth_name": "동삼동",
+            "road_name": "해양로301번길",
+            "sub_building_no": "",
+            "underground_yn": "N",
+            "x": "129.080244864532",
+            "y": "35.0785634152872",
+            "zone_no": "49111"
+          },
+          "x": "129.080244864532",
+          "y": "35.0785634152872"
+        }
+      ],
+      "meta": {
+        "is_end": true,
+        "pageable_count": 1,
+        "total_count": 1
+      }
+    },
+    "checked_at": "2026-10-26"
+  },
+  "oldtown:7a0b4c62f0407164": {
+    "name": "아르떼뮤지엄 부산",
+    "query": "부산광역시 영도구 해양로247번길 29",
+    "http_status": 200,
+    "response": {
+      "documents": [
+        {
+          "address": {
+            "address_name": "부산 영도구 동삼동 201-74",
+            "b_code": "2620012100",
+            "h_code": "2620067000",
+            "main_address_no": "201",
+            "mountain_yn": "N",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "영도구",
+            "region_3depth_h_name": "동삼3동",
+            "region_3depth_name": "동삼동",
+            "sub_address_no": "74",
+            "x": "129.075922590706",
+            "y": "35.0864862398546"
+          },
+          "address_name": "부산 영도구 해양로247번길 29",
+          "address_type": "ROAD_ADDR",
+          "road_address": {
+            "address_name": "부산 영도구 해양로247번길 29",
+            "building_name": "아르떼뮤지엄 부산",
+            "main_building_no": "29",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "영도구",
+            "region_3depth_name": "동삼동",
+            "road_name": "해양로247번길",
+            "sub_building_no": "",
+            "underground_yn": "N",
+            "x": "129.075922590706",
+            "y": "35.0864862398546",
+            "zone_no": "49013"
+          },
+          "x": "129.075922590706",
+          "y": "35.0864862398546"
+        }
+      ],
+      "meta": {
+        "is_end": true,
+        "pageable_count": 1,
+        "total_count": 1
+      }
+    },
+    "checked_at": "2026-10-26"
+  },
+  "oldtown:566d7db42ddef70d": {
+    "name": "태종대유원지",
+    "query": "부산광역시 영도구 전망로 257",
+    "http_status": 200,
+    "response": {
+      "documents": [
+        {
+          "address": {
+            "address_name": "부산 영도구 동삼동 산 29-1",
+            "b_code": "2620012100",
+            "h_code": "2620066000",
+            "main_address_no": "29",
+            "mountain_yn": "Y",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "영도구",
+            "region_3depth_h_name": "동삼2동",
+            "region_3depth_name": "동삼동",
+            "sub_address_no": "1",
+            "x": "129.083585557678",
+            "y": "35.0513200982691"
+          },
+          "address_name": "부산 영도구 전망로 257",
+          "address_type": "ROAD_ADDR",
+          "road_address": {
+            "address_name": "부산 영도구 전망로 257",
+            "building_name": "",
+            "main_building_no": "257",
+            "region_1depth_name": "부산",
+            "region_2depth_name": "영도구",
+            "region_3depth_name": "동삼동",
+            "road_name": "전망로",
+            "sub_building_no": "",
+            "underground_yn": "N",
+            "x": "129.083585557678",
+            "y": "35.0513200982691",
+            "zone_no": "49127"
+          },
+          "x": "129.083585557678",
+          "y": "35.0513200982691"
+        }
+      ],
+      "meta": {
+        "is_end": true,
+        "pageable_count": 1,
+        "total_count": 1
+      }
+    },
+    "checked_at": "2026-10-26"
+  }
+}

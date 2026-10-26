@@ -74,6 +74,12 @@ def _place_fields(stop, opening=None, language=None):
         "busan_taste_name": stop.get("busan_taste_name", ""),
         "duration_min": stop["duration_min"],
         "estimated_spend": None if pd.isna(spend) else spend,
+        "district": stop.get("district"),
+        "opening_hours": stop.get("opening_hours"),
+        "admission_fee_krw": None if pd.isna(stop.get("admission_fee_krw")) else stop.get("admission_fee_krw"),
+        "admission_fee_weekend_krw": None if pd.isna(stop.get("admission_fee_weekend_krw")) else stop.get("admission_fee_weekend_krw"),
+        "admission_fee_status": stop.get("admission_fee_status", "unknown"),
+        "admission_fee_note": stop.get("admission_fee_note"),
         "duration_basis": stop.get("duration_basis", "place_default"),
         "id": stop["id"],
         "name": stop["name"],
@@ -212,6 +218,13 @@ def recalculate_route(start_lat, start_lon, stops, max_minutes=90, return_to_sta
     return summary
 
 
+def rotate_merchants(places):
+    """Keep non-merchants in distance slots; exposure history applies only to registered shops."""
+    registered = [p for p in places if p.get("payment_status") == "merchant_listed"]
+    rotated = iter(rotate(registered)) if registered else iter(())
+    return [next(rotated) if p.get("payment_status") == "merchant_listed" else p for p in places[:3]]
+
+
 def next_places(catalog, start_lat, start_lon, stops, category=None, max_minutes=90, return_to_start=False, *, record_candidates=False, opening=None, language=None):
     """Keep user order, allow 20-minute legs and at most a 10-minute total overrun."""
     leg = route_legs()
@@ -253,5 +266,5 @@ def next_places(catalog, start_lat, start_lon, stops, category=None, max_minutes
     if category == "관광명소":
         result["alternatives"] = (fitting + overruns)[:3]
     else:
-        result["alternatives"] = (rotate(fitting) + rotate(overruns))[:3]
+        result["alternatives"] = (rotate_merchants(fitting) + rotate_merchants(overruns))[:3]
     return result

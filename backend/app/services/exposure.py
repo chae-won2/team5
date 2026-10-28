@@ -83,6 +83,32 @@ def counts():
     return result
 
 
+def summary():
+    """Aggregate view for the operator dashboard: per-place rotation counts plus overall request volume."""
+    cutoff = time.time() - WINDOW_SECONDS
+    with database() as db:
+        total = db.execute("SELECT COUNT(*) FROM lists WHERE created >= ? AND mode = 'production'", (cutoff,)).fetchone()[0]
+        shown = db.execute("SELECT COUNT(*) FROM lists WHERE created >= ? AND mode = 'production' AND shown IS NOT NULL", (cutoff,)).fetchone()[0]
+        empty = db.execute("SELECT COUNT(*) FROM lists WHERE created >= ? AND mode = 'production' AND places = '[]'", (cutoff,)).fetchone()[0]
+    return {'requests_total': total, 'requests_shown': shown, 'requests_empty': empty, 'places': counts()}
+
+
+def window_summary(weeks_ago):
+    """Same shape as summary() but for the single 7-day window starting `weeks_ago` weeks before now; used to build real (not fabricated) trend comparisons."""
+    now = time.time()
+    hi, lo = now - weeks_ago * WINDOW_SECONDS, now - (weeks_ago + 1) * WINDOW_SECONDS
+    with database() as db:
+        total = db.execute("SELECT COUNT(*) FROM lists WHERE created >= ? AND created < ? AND mode = 'production'", (lo, hi)).fetchone()[0]
+        shown = db.execute("SELECT COUNT(*) FROM lists WHERE created >= ? AND created < ? AND mode = 'production' AND shown IS NOT NULL", (lo, hi)).fetchone()[0]
+        rows = db.execute("SELECT places FROM lists WHERE shown >= ? AND shown < ? AND mode = 'production'", (lo, hi)).fetchall()
+    places = {}
+    for (row,) in rows:
+        for rank, place_id in enumerate(json.loads(row)):
+            top, total_rank = places.get(place_id, (0, 0))
+            places[place_id] = (top + (rank == 0), total_rank + 1)
+    return {'requests_total': total, 'requests_shown': shown, 'places': places}
+
+
 def rotate(candidates):
     if not candidates:
         return []

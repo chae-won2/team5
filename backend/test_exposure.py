@@ -1,12 +1,13 @@
 import os
 import tempfile
+import time
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 from app.main import app
-from app.services.exposure import rotate, issue, acknowledge, counts, database, ExposureStorageError, PostgresConnection
+from app.services.exposure import rotate, issue, acknowledge, counts, window_summary, database, ExposureStorageError, PostgresConnection, WINDOW_SECONDS
 from app.data_loader import load_places
 from app.services.route import next_places
 
@@ -35,6 +36,15 @@ class ExposureTests(unittest.TestCase):
         self.assertEqual([p['id'] for p in rotate(self.places)],['b','c','a'])
         # A fresh database connection retains the acknowledged list.
         self.assertEqual(counts()['a'],(1,1))
+
+    def test_window_summary_splits_by_week(self):
+        token = issue(self.places[:1])
+        acknowledge(token)
+        self.assertEqual(window_summary(0), {'requests_total': 1, 'requests_shown': 1, 'places': {'a': (1, 1)}})
+        self.assertEqual(window_summary(1), {'requests_total': 0, 'requests_shown': 0, 'places': {}})
+        with patch('app.services.exposure.time.time', return_value=time.time() + WINDOW_SECONDS):
+            self.assertEqual(window_summary(0)['requests_total'], 0)
+            self.assertEqual(window_summary(1)['requests_total'], 1)
 
     def test_endpoint_validation_and_expired_history(self):
         client = TestClient(app)

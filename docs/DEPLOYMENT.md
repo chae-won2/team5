@@ -12,7 +12,7 @@ git push origin codex/deploy-render
 
 푸시 후 Render에서 해당 커밋이 Live인지 확인합니다. `render.yaml`은 구성 명세이며 기존 수동 생성 서비스의 비밀값을 자동으로 채우지 않습니다. `.env`·원천 전체·노출 SQLite는 이미지에 넣지 않습니다. Docker는 최종 장소·가맹점·부산의 맛 자료만 필요한 경로로 복사합니다.
 
-Render 서버 환경변수: `KAKAO_REST_API_KEY`, `TMAP_APP_KEY`, `BREVO_API_KEY`, `EMAIL_FROM`, `EMAIL_DELIVERY_ENABLED=true`, `EXPOSURE_DATABASE_URL`. 비밀값을 README·GitHub·프런트 변수에 붙이지 않습니다.
+Render 서버 환경변수: `KAKAO_REST_API_KEY`, `TMAP_APP_KEY`, `BREVO_API_KEY`, `EMAIL_FROM`, `EMAIL_DELIVERY_ENABLED=true`, `EXPOSURE_DATABASE_URL`, `ADMIN_DASHBOARD_KEY`(`/admin` 운영 대시보드 접근 키). 비밀값을 README·GitHub·프런트 변수에 붙이지 않습니다.
 
 ## Supabase 영속 노출 기록
 

@@ -6,7 +6,7 @@ import { useI18n } from "../i18n.js";
 import { useEffect, useRef } from 'react';
 import { recordImpression } from '../api';
 
-export default function NextPlacePicker({ categories, selectedCategories, activeCategory, candidates, recommendationId, maxMinutes, busy, stops, remainingMinutes, onCategory, onSelect, onFinish }) {
+export default function NextPlacePicker({ categories, activeCategory, candidates, recommendationId, maxMinutes, busy, stops, remainingMinutes, onCategory, onSelect, onFinish }) {
   const { t, approx, walkTime, stayTime } = useI18n();
   const listRef = useRef(null);
   useEffect(() => {
@@ -34,8 +34,9 @@ export default function NextPlacePicker({ categories, selectedCategories, active
   return <section className="next-place-picker" aria-label={t("buildCourse")}>
     <div className="panel-heading"><h2>{t("nextStop", { n: stops.length + 1 })}</h2></div>
     <p className="source-note">{t("chooseNextHint")}</p>
-    <p className="remaining-time">{t("remainingTime", { time: approx(remainingMinutes) })}</p>
-    <div className="next-category-tabs">{categories.map((category) => <button key={category} type="button" className={selectedCategories.includes(category) ? "trip-category-selected" : undefined} aria-pressed={activeCategory === category} disabled={busy} onClick={() => onCategory(category)}>{t(category)}</button>)}</div>
+    <div className="selection-progress"><div><span>{t("budgetRemaining")}</span><strong>{approx(remainingMinutes)}</strong></div><progress max={maxMinutes} value={Math.min(maxMinutes,Math.max(0,maxMinutes-remainingMinutes))} aria-label={t("budgetRemaining")} /></div>
+    <ol className="selected-sequence"><li><b>S</b>{t("start")}</li>{stops.map((stop,i)=><li key={stop.id}><b>{i+1}</b>{stop.name}</li>)}<li className="sequence-next"><b>{stops.length+1}</b>{t("nextStop",{n:stops.length+1})}</li></ol>
+    <div className="next-category-tabs">{categories.map((category) => <button key={category} type="button" aria-pressed={activeCategory === category} disabled={busy} onClick={() => onCategory(category)}>{t(category)}</button>)}</div>
     <div ref={listRef} aria-live="polite" aria-busy={busy}>
       {busy ? <p className="source-note">{t("findingNext")}</p> : activeCategory && (candidates.length ? <ul className="alt-list next-candidates">{candidates.map((place) => <li key={place.id}><button type="button" onClick={() => onSelect(place)}>
         <span className="result-name">{place.name}</span><PlaceNameSupplement place={place} className="result-official-name" /><span className="result-address">{place.address}</span>

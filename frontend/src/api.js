@@ -9,6 +9,10 @@ async function request(path, options) {
   return res.json();
 }
 
+export function getMapRegion({ lat, lon, signal }) {
+  return request(`/api/geocode/region?${new URLSearchParams({lat,lon})}`, {signal});
+}
+
 export function getCategories() {
   return request("/api/spots/categories");
 }
@@ -32,7 +36,7 @@ export function getRecommendation({ startLat, startLon, categories, maxMinutes, 
   });
 }
 
-export function sendRouteEmail({ email, stops, totalMinutes, maxMinutes, startPoint, emailConsent, returnLeg, language, departureTime }) {
+export function sendRouteEmail({ email, stops, totalMinutes, maxMinutes, startPoint, emailConsent, returnLeg, language, departureTime, departureDate }) {
   return request("/api/notify/email", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -41,6 +45,7 @@ export function sendRouteEmail({ email, stops, totalMinutes, maxMinutes, startPo
       email_consent: emailConsent === true,
       language,
       departure_time: departureTime || null,
+      departure_date: departureDate || null,
       return_seconds: returnLeg?.leg_seconds,
       return_estimated: returnLeg?.routing_source === "estimated",
       return_to_start: !!returnLeg,

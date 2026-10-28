@@ -7,15 +7,20 @@ import RouteList from "./components/RouteList";
 import NextPlacePicker from "./components/NextPlacePicker";
 import { getCategories, getNextPlaces } from "./api";
 import "./App.css";
+import "./sea-theme.css";
+import WelcomeDialog from "./components/WelcomeDialog";
 import Icon from "./components/Icon";
 import ServiceInfo from "./components/ServiceInfo";
 
 export default function App() {
   const { locale, setLocale, languages, t, message } = useI18n();
   const [info, setInfo] = useState(null);
+  const [welcome, setWelcome] = useState(() => {
+    if (new URLSearchParams(window.location.search).has("stop")) return false;
+    try { return localStorage.getItem("busan-welcome-hidden") !== "1"; } catch { return true; }
+  });
   const [startPoint, setStartPoint] = useState(null);
   const [allCategories, setAllCategories] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [returnToStart, setReturnToStart] = useState(false);
   const [departureDate, setDepartureDate] = useState(busanDate());
   const [departureTime, setDepartureTime] = useState("");
@@ -79,12 +84,6 @@ export default function App() {
       .finally(() => setLoading(false));
   }, []);
 
-  function toggleCategory(c) {
-    setCategories((prev) =>
-      prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]
-    );
-  }
-
   function applyRoute(data) {
     setStops(data.stops);
     setAlternatives(data.alternatives || []);
@@ -97,7 +96,7 @@ export default function App() {
 
   function handleSubmit() {
     if (!startPoint || loading) return;
-    const conditions = { startPoint, maxMinutes, returnToStart, categories: [...categories], departureDate, departureTime };
+    const conditions = { startPoint, maxMinutes, returnToStart, categories: [], departureDate, departureTime };
     setAppliedConditions(conditions);
     setScheduleStart(departureTime || busanClock());
     applyRoute({ stops: [], total_minutes: 0, over_budget: false });
@@ -105,7 +104,7 @@ export default function App() {
     setNotice(null);
     setHasSearched(true);
     setBuilding(true);
-    updateSelection([], categories[0] || allCategories[0] || null, conditions);
+    updateSelection([], allCategories[0] || null, conditions);
   }
 
   async function updateSelection(nextStops, category = null, conditions = appliedConditions) {
@@ -128,22 +127,25 @@ export default function App() {
   const phase = loading && !hasSearched ? "loading" : hasSearched ? "result" : "setup";
 
   return (
-    <div className="app">
+    <div className={`app phase-${hasSearched ? building ? "choosing" : "complete" : "setup"}`}>
       <header className="app-header">
         <a className="brand" href="/" aria-label={t("home")}><span className="brand-image"><img src="/busan-full-course-logo.png" alt="부산 풀코스 · BUSAN FULL COURSE" /></span></a>
         <nav className="header-nav" aria-label={t("navigation")}><span className="header-tab active"><Icon name="route" size={17} />{t("plan")}</span><button type="button" onClick={() => setInfo("guide")}>{t("guide")}</button></nav>
         <span className="partner-badge"><small>{t("partnerBadge")}</small><img src="/busan-pay-logo.png" alt="BUSAN Pay" /></span>
         <select className="language-select" aria-label={t("language")} value={locale} onChange={(e) => setLocale(e.target.value)}>{Object.entries(languages).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</select>
       </header>
+      <svg className="wave-divider" viewBox="0 0 1200 24" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 10 C50 0 100 0 150 10 S250 20 300 10 S400 0 450 10 S550 20 600 10 S700 0 750 10 S850 20 900 10 S1000 0 1050 10 S1150 20 1200 10" stroke="#8CCBEA" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
+        <path d="M0 14 C50 6 100 6 150 14 S250 22 300 14 S400 6 450 14 S550 22 600 14 S700 6 750 14 S850 22 900 14 S1000 6 1050 14 S1150 22 1200 14" stroke="#FFE08A" strokeWidth="1.5" fill="none" vectorEffect="non-scaling-stroke" />
+      </svg>
 
+      <ol className="planner-steps" aria-label={t("plan")}>{["stepSetup","stepPlaces","stepFinish"].map((key,i) => <li key={key} aria-current={(!hasSearched ? i===0 : building ? i===1 : i===2) ? "step" : undefined}><span>{i+1}</span>{t(key)}</li>)}</ol>
       <div className="app-body">
         <aside className="sidebar">
           <div className="sidebar-scroll">
             <section className="planner-intro" id="trip-planner"><h1>{t("appTitle")}</h1><p>{t("intro")}</p></section>
             <FilterPanel
               startPoint={startPoint} setStartPoint={setStartPoint}
-              allCategories={allCategories}
-              categories={categories} toggleCategory={toggleCategory}
               returnToStart={returnToStart} setReturnToStart={setReturnToStart}
               maxMinutes={maxMinutes} setMaxMinutes={setMaxMinutes}
               departureDate={departureDate} setDepartureDate={setDepartureDate}
@@ -158,14 +160,13 @@ export default function App() {
               stops={stops} alternatives={alternatives}
               totalMinutes={totalMinutes} overBudget={overBudget}
               maxMinutes={appliedConditions?.maxMinutes || maxMinutes}
-              scheduleStart={scheduleStart} automaticStart={!appliedConditions?.departureTime}
+              scheduleStart={scheduleStart} departureDate={appliedConditions?.departureDate || departureDate} automaticStart={!appliedConditions?.departureTime}
               phase={phase} startPoint={appliedConditions?.startPoint || startPoint} returnLeg={returnLeg}
               building={building} busy={loading}
               onRemoveStop={(index) => updateSelection(stops.filter((_, i) => i !== index))}
             />
               {hasSearched && (building ? <NextPlacePicker
-                categories={appliedConditions.categories.length ? appliedConditions.categories : allCategories}
-                selectedCategories={appliedConditions.categories}
+                categories={allCategories}
                 activeCategory={activeCategory} candidates={alternatives} busy={loading}
                 recommendationId={recommendationId}
                 maxMinutes={appliedConditions.maxMinutes}
@@ -179,12 +180,13 @@ export default function App() {
         </aside>
         <main className="map-area">
           <MapView
-            stops={stops} returnLeg={returnLeg} startPoint={hasSearched ? appliedConditions?.startPoint : startPoint} onPickStart={(point) => { if (!hasSearched) setStartPoint(point); }}
+            candidates={building ? alternatives : []} stops={stops} returnLeg={returnLeg} startPoint={hasSearched ? appliedConditions?.startPoint : startPoint} onPickStart={(point) => { if (!hasSearched) setStartPoint(point); }}
             totalMinutes={totalMinutes} overBudget={overBudget} maxMinutes={appliedConditions?.maxMinutes || maxMinutes}
           />
         </main>
       </div>
       <footer className="app-footer"><span>© BUSAN FULL COURSE <span className="footer-divider">|</span> {t("footer")}</span><div><button type="button" onClick={() => setInfo("guide")}>{t("guide")}</button><button type="button" onClick={() => setInfo("privacy")}>{t("privacy")}</button></div></footer>
+      {welcome && <WelcomeDialog onClose={() => setWelcome(false)} />}
       {info && <ServiceInfo section={info} onClose={() => setInfo(null)} />}
     </div>
   );

@@ -1,5 +1,7 @@
 """User-ordered courses, walking constraints, optional time overruns and exposure rotation."""
 
+from concurrent.futures import ThreadPoolExecutor
+
 import pandas as pd
 
 from app.services.geo import haversine_m
@@ -112,6 +114,14 @@ def route_legs():
     return leg
 
 
+def fetch_legs(leg, pairs, workers=4):
+    """Fetch independent walking legs concurrently; TMAP calls are I/O-bound so threads overlap their wait time."""
+    if not pairs:
+        return []
+    with ThreadPoolExecutor(max_workers=min(workers, len(pairs))) as pool:
+        return list(pool.map(lambda p: leg(*p), pairs))
+
+
 def walking_seconds(leg):
     return leg.get("leg_seconds", leg["leg_minutes"] * 60)
 
@@ -167,11 +177,12 @@ def recommend_route(catalog, start_lat, start_lon, categories=None, max_minutes=
     alternatives = []
     # Verify a few alternatives per category even when that category was not selected.
     for category in CATEGORIES:
+        eligible = [p for p in candidates
+                    if p["category"] == category and p["id"] not in chosen and not _is_closed(p["id"], opening)]
+        origin_legs = fetch_legs(leg, [(start_lat, start_lon, p["lat"], p["lon"]) for p in eligible])
         found = 0
-        for place in candidates:
-            if place["category"] != category or place["id"] in chosen or _is_closed(place["id"], opening):
-                continue
-            origin_leg = origin.setdefault(place["id"], leg(start_lat, start_lon, place["lat"], place["lon"]))
+        for place, origin_leg in zip(eligible, origin_legs):
+            origin[place["id"]] = origin_leg
             if not within_walk_limit(origin_leg):
                 continue
             alternatives.append({**_place_fields(place, opening, language), "origin_walk_minutes": origin_leg["leg_minutes"]})
@@ -241,15 +252,18 @@ def next_places(catalog, start_lat, start_lon, stops, category=None, max_minutes
     pool = catalog[(catalog.category == category) & ~catalog.id.isin(used_ids)]
     candidates = nearest_candidates(pool, current["lat"], current["lon"], [category], limit=20)
     used_seconds = result["total_seconds"] - (walking_seconds(result["return_leg"]) if result["return_leg"] else 0)
-    for place in candidates:
-        if _is_closed(place["id"], opening):
-            continue
-        incoming = leg(current["lat"], current["lon"], place["lat"], place["lon"])
+    budget_seconds = (max_minutes + MAX_OVERRUN_MINUTES) * 60
+    # Stay duration alone already blows the budget for these; skip the TMAP call entirely.
+    feasible = [p for p in candidates
+                if not _is_closed(p["id"], opening) and used_seconds + p["duration_min"] * 60 <= budget_seconds]
+    incoming_legs = fetch_legs(leg, [(current["lat"], current["lon"], p["lat"], p["lon"]) for p in feasible])
+    back_legs = (fetch_legs(leg, [(p["lat"], p["lon"], start_lat, start_lon) for p in feasible])
+                 if return_to_start else [None] * len(feasible))
+    for place, incoming, back in zip(feasible, incoming_legs, back_legs):
         if not within_walk_limit(incoming):
             continue
-        back = leg(place["lat"], place["lon"], start_lat, start_lon) if return_to_start else None
         seconds = used_seconds + walking_seconds(incoming) + place["duration_min"] * 60 + (walking_seconds(back) if back else 0)
-        if seconds > (max_minutes + MAX_OVERRUN_MINUTES) * 60:
+        if seconds > budget_seconds:
             continue
         total = round(seconds / 60, 1)
         if record_candidates:

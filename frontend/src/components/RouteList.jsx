@@ -10,27 +10,28 @@ import RouteLoading from "./RouteLoading";
 import Icon from "./Icon";
 import Dialog from "./Dialog";
 
-function EmailModal({ onClose, onSend, sending, sendResult }) {
-  const { t } = useI18n();
+function EmailModal({ onClose, onSend, sending, sendResult, summary }) {
+  const { t, locale, setLocale, languages } = useI18n();
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
   return <Dialog title={t("emailTitle")} onClose={onClose}>
-    <p className="dialog-intro">{t("emailIntro")}</p>
+    <p className="dialog-intro">{summary}</p>
     <form onSubmit={(e) => { e.preventDefault(); if (consent && !sending) onSend(email); }}>
       <label className="field email-field"><span>{t("emailAddress")}</span><input type="email" required maxLength={254} autoComplete="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} className="email-input" /></label>
+      <div className="field"><span>{t("chooseLanguage")}</span><div className="language-options">{Object.entries(languages).map(([code,label])=><button type="button" key={code} aria-pressed={locale===code} disabled={sending} onClick={()=>setLocale(code)}>{label}</button>)}</div></div>
       <div className="consent-details"><strong>{t("emailUse")}</strong><p>{t("emailUseBody")}</p><p>{t("emailOptional")}</p></div>
       <label className="consent-check"><input type="checkbox" required checked={consent} onChange={(e) => setConsent(e.target.checked)} /><span>{t("emailConsent")}</span></label>
       <div className="modal-actions"><button type="button" className="secondary-btn" onClick={onClose} disabled={sending}>{t("close")}</button><button type="submit" className="submit-btn" disabled={!email || !consent || sending || sendResult === "success"}>{sending ? t("sending") : t("send")}<Icon name="mail" size={18} /></button></div>
     </form>
     <div role="status" aria-live="polite">
-      {sendResult === "success" && <p className="email-send-note">{t("sent")}</p>}
+      {sendResult === "success" && <div className="email-success"><Icon name="check" size={30}/><strong>{t("emailSuccess")}</strong><p>{t("spamHint")}</p></div>}
       {sendResult === "pending" && <p className="email-send-note muted">{t("mailPending")}</p>}
       {sendResult === "error" && <p className="email-send-note error">{t("mailFailed")}</p>}
     </div>
   </Dialog>;
 }
 
-export default function RouteList({ stops, totalMinutes, maxMinutes, overBudget, phase, startPoint, returnLeg, building, busy, onRemoveStop, scheduleStart, automaticStart }) {
+export default function RouteList({ stops, totalMinutes, maxMinutes, overBudget, phase, startPoint, returnLeg, building, busy, onRemoveStop, scheduleStart, departureDate, automaticStart }) {
   const { t, approx, walkTime, stayTime, placeLabel, locale } = useI18n();
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [sending, setSending] = useState(false);
@@ -38,7 +39,7 @@ export default function RouteList({ stops, totalMinutes, maxMinutes, overBudget,
   async function handleSendEmail(email) {
     setSending(true); setSendResult(null);
     try {
-      const res = await sendRouteEmail({ email, stops, totalMinutes, maxMinutes, startPoint, emailConsent: true, returnLeg, language: locale, departureTime: scheduleStart });
+      const res = await sendRouteEmail({ email, stops, totalMinutes, maxMinutes, startPoint, emailConsent: true, returnLeg, language: locale, departureTime: scheduleStart, departureDate });
       setSendResult(res.sent ? "success" : "pending");
     } catch { setSendResult("error"); }
     finally { setSending(false); }
@@ -51,11 +52,13 @@ export default function RouteList({ stops, totalMinutes, maxMinutes, overBudget,
   const stay = stops.reduce((sum, s) => sum + s.duration_min, 0);
   const schedule = buildSchedule(stops, scheduleStart, returnLeg);
   const timeRange = (range) => formatScheduleRange(locale, range);
-  return <section className="route-list" aria-label={t("results")}>
-    <div className="panel-heading"><h2>{t("results")}</h2><span>{t("placeCount", { count: stops.length })}</span></div>
+  const knownPrices = stops.filter(s => ["식당","카페·디저트","카페/디저트"].includes(s.category) && Number.isFinite(s.estimated_spend));
+  const knownSpend = knownPrices.reduce((sum,s)=>sum+s.estimated_spend,0);
+  return <section className={building ? "route-list building-view" : "route-list"} aria-label={t("results")}>
+    {!building ? <><div className="completion-heading"><span className="completion-icon"><Icon name="check" size={25}/></span><div><small>{t("courseComplete")}</small><h2>{t("appTitle")}</h2></div></div><div className="course-stats"><div><strong>{t("placeCount",{count:stops.length})}</strong><small>{t("results")}</small></div><div><strong>{approx(totalMinutes)}</strong><small>{schedule ? timeRange({start:schedule.visits[0].walk.start,end:(schedule.returnWalk || schedule.visits.at(-1).stay).end}) : t("estimatedTotal")}</small></div><div><strong>{knownPrices.length ? `₩${knownSpend.toLocaleString()}` : t("priceUnknown")}</strong><small>{t("estimatedSpendLabel")}</small><small>{knownPrices.length ? t("knownSpend") : ""}</small></div></div></> : <div className="panel-heading"><h2>{t("results")}</h2><span>{t("placeCount", { count: stops.length })}</span></div>}
     <div className={overBudget ? "summary-bar over" : "summary-bar"}><div><span>{t("estimatedTotal")}</span><strong>{approx(totalMinutes)}</strong></div><p>{walkTime(walk)} + {stayTime(stay)}</p>{overBudget && <span className="over-badge" role="status">{t("timeOverrun", { limit: approx(maxMinutes), extra: approx(Math.round((totalMinutes - maxMinutes) * 10) / 10) })}</span>}</div>
     {schedule && <p className="schedule-start">{t(building && automaticStart ? "departurePreview" : "departureAt", { time: scheduleStart })}{!building && automaticStart && <small>{t("completionTimeBasis")}</small>}</p>}
-    <div className="route-timeline">{stops.map((stop, idx) => {
+    <details className="selected-details" open={building ? undefined : true}>{building && <summary>{t("placeCount",{count:stops.length})} · {t("editCourse")}</summary>}<div className="route-timeline">{stops.map((stop, idx) => {
       return <div key={stop.id} className="route-stop">
         <div className="timeline-col"><span className="order-badge">{stop.order}</span><span className="timeline-line" /></div>
         <div className="route-stop-body"><div className="leg-label"><Icon name="walk" size={14} />{walkTime(stop.leg_minutes)}{schedule && <span className="leg-time">({timeRange(schedule.visits[idx].walk)})</span>}</div>
@@ -63,10 +66,10 @@ export default function RouteList({ stops, totalMinutes, maxMinutes, overBudget,
 
         </div>
       </div>;
-    })}</div>
+    })}</div></details>
     {returnLeg && <div className="return-stop"><Icon name="pin" size={17} /><div><strong>{t("returnStart")}</strong><p>{placeLabel(startPoint)} · {walkTime(returnLeg.leg_minutes)}{schedule && <span className="leg-time"> ({timeRange(schedule.returnWalk)})</span>}</p></div></div>}
     {!building && <button type="button" className="submit-btn email-cta" onClick={() => { setSendResult(null); setShowEmailModal(true); }}><Icon name="mail" size={18} />{t("emailCTA")}<Icon name="arrow" size={18} /></button>}
     <p className="source-note">{t("sourceNote")}</p>
-    {showEmailModal && <EmailModal onClose={() => { if (!sending) setShowEmailModal(false); }} onSend={handleSendEmail} sending={sending} sendResult={sendResult} />}
+    {showEmailModal && <EmailModal summary={`${t("placeCount",{count:stops.length})} · ${approx(totalMinutes)}`} onClose={() => { if (!sending) setShowEmailModal(false); }} onSend={handleSendEmail} sending={sending} sendResult={sendResult} />}
   </section>;
 }

@@ -25,7 +25,29 @@
     "hours": "{n}시간",
     "minutes": "{n}분",
     "romanized_name": "로마자 표기 (자동)",
-    "walking_estimate_notice": "도보 경로 서비스가 일시적으로 제한되어 이동시간을 직선거리 기반으로 추정했어요. 도보 20분 범위와 일정 시각도 추정 기준이며, 실제 경로·소요시간은 다를 수 있어요."
+    "walking_estimate_notice": "도보 경로 서비스가 일시적으로 제한되어 이동시간을 직선거리 기반으로 추정했어요. 도보 20분 범위와 일정 시각도 추정 기준이며, 실제 경로·소요시간은 다를 수 있어요.",
+    "card": {
+      "title": "나만의 부산 도보 코스가 완성됐어요",
+      "schedule": "일정",
+      "places": "방문 장소",
+      "walking": "도보 총 약 {time}",
+      "spend_title": "1인 예상 지출",
+      "known_prices": "식당·카페의 확인된 금액 합계",
+      "payment_notice": "장소별 부산페이 결제 가능 여부를 확인해주세요. 가맹 정보는 변경될 수 있습니다.",
+      "spend": "예상 지출 · 1인 약 ₩{amount}",
+      "price_unknown": "가격 확인 필요",
+      "free": "입장료 무료 · 별도 유료 체험 제외",
+      "admission": "일반 성인 입장료 약 ₩{amount}",
+      "fee_check": "입장권·방문일별 요금 확인 필요",
+      "payment_listed": "#동백전결제가능 · 가맹점 명부 기준",
+      "payment_no": "동백전 결제 불가",
+      "payment_check": "동백전 결제 여부 확인 필요",
+      "maps": "구글 지도",
+      "reopen_hint": "장소를 바꾸거나 지도에서 경로를 확인할 수 있어요",
+      "start": "출발지",
+      "walking_unknown": "도보시간 확인 필요",
+      "website": "웹사이트"
+    }
   },
   "en": {
     "subject": "Busan Full Course · Your walking route",
@@ -53,7 +75,29 @@
     "hours": "{n} hr",
     "minutes": "{n} min",
     "romanized_name": "Romanized name (automatic)",
-    "walking_estimate_notice": "Walking routing is temporarily unavailable. Walking times, the 20-minute range and schedule are estimated from straight-line distances; actual routes and times may differ."
+    "walking_estimate_notice": "Walking routing is temporarily unavailable. Walking times, the 20-minute range and schedule are estimated from straight-line distances; actual routes and times may differ.",
+    "card": {
+      "title": "Your Busan walking course is ready",
+      "schedule": "Schedule",
+      "places": "Places",
+      "walking": "Walking: about {time}",
+      "spend_title": "Estimated spend / person",
+      "known_prices": "Sum of known dining and café prices",
+      "payment_notice": "Check Busan Pay availability for each place. Merchant information may change.",
+      "spend": "Estimated spend: about ₩{amount} / person",
+      "price_unknown": "Price to be checked",
+      "free": "Free admission · paid experiences excluded",
+      "admission": "Standard adult admission: about ₩{amount}",
+      "fee_check": "Check admission prices for your visit date",
+      "payment_listed": "Dongbaekjeon listed merchant",
+      "payment_no": "Dongbaekjeon not accepted",
+      "payment_check": "Dongbaekjeon acceptance to be checked",
+      "maps": "Google Maps",
+      "reopen_hint": "Change stops or check the route on the map",
+      "start": "Starting point",
+      "walking_unknown": "Walking time to be checked",
+      "website": "Website"
+    }
   },
   "ja": {
     "subject": "BUSAN FULL COURSE · あなたの徒歩コース",
@@ -81,7 +125,29 @@
     "hours": "{n}時間",
     "minutes": "{n}分",
     "romanized_name": "ローマ字表記（自動）",
-    "walking_estimate_notice": "徒歩経路サービスが一時的に利用できないため、直線距離から移動時間を推定しています。徒歩20分の範囲と予定時刻も推定であり、実際の経路・所要時間とは異なる場合があります。"
+    "walking_estimate_notice": "徒歩経路サービスが一時的に利用できないため、直線距離から移動時間を推定しています。徒歩20分の範囲と予定時刻も推定であり、実際の経路・所要時間とは異なる場合があります。",
+    "card": {
+      "title": "釜山の徒歩コースが完成しました",
+      "schedule": "日程",
+      "places": "訪問先",
+      "walking": "徒歩合計：約{time}",
+      "spend_title": "1人の予想支出",
+      "known_prices": "確認済みの飲食店・カフェ料金の合計",
+      "payment_notice": "Busan Payの利用可否は各施設でご確認ください。加盟情報は変更される場合があります。",
+      "spend": "1人の予想支出：約₩{amount}",
+      "price_unknown": "価格の確認が必要",
+      "free": "入場無料 · 有料体験は対象外",
+      "admission": "一般大人の入場料：約₩{amount}",
+      "fee_check": "訪問日・チケット別の料金をご確認ください",
+      "payment_listed": "東柏銭加盟店リスト掲載",
+      "payment_no": "東柏銭決済不可",
+      "payment_check": "東柏銭利用可否の確認が必要",
+      "maps": "Google マップ",
+      "reopen_hint": "訪問先の変更や地図での経路確認ができます",
+      "start": "出発地",
+      "walking_unknown": "徒歩時間の確認が必要",
+      "website": "ウェブサイト"
+    }
   },
   "zh-TW": {
     "subject": "BUSAN FULL COURSE · 您的步行路線",
@@ -109,6 +175,28 @@
     "hours": "{n}小時",
     "minutes": "{n}分鐘",
     "romanized_name": "羅馬字標示（自動）",
-    "walking_estimate_notice": "步行路線服務暫時無法使用，目前依直線距離估算步行時間。20分鐘步行範圍及行程時刻亦為估算，實際路線與所需時間可能不同。"
+    "walking_estimate_notice": "步行路線服務暫時無法使用，目前依直線距離估算步行時間。20分鐘步行範圍及行程時刻亦為估算，實際路線與所需時間可能不同。",
+    "card": {
+      "title": "您的釜山步行路線已完成",
+      "schedule": "行程",
+      "places": "造訪地點",
+      "walking": "總步行：約{time}",
+      "spend_title": "每人預估支出",
+      "known_prices": "已確認的餐廳與咖啡店金額合計",
+      "payment_notice": "請逐一確認各地點是否接受Busan Pay。加盟資訊可能變更。",
+      "spend": "每人預估支出：約₩{amount}",
+      "price_unknown": "價格待確認",
+      "free": "免費入場 · 不含付費體驗",
+      "admission": "一般成人入場費：約₩{amount}",
+      "fee_check": "請確認造訪日期與票種的費用",
+      "payment_listed": "東柏錢加盟名單登載",
+      "payment_no": "不接受東柏錢付款",
+      "payment_check": "東柏錢付款方式待確認",
+      "maps": "Google 地圖",
+      "reopen_hint": "可修改地點或在地圖上查看路線",
+      "start": "出發地",
+      "walking_unknown": "步行時間待確認",
+      "website": "網站"
+    }
   }
 }

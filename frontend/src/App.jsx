@@ -130,7 +130,7 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <a className="brand" href="/" aria-label={t("home")}><span className="brand-image"><img src="/busan-full-course-logo.png" alt="BUSAN FULL COURSE" /></span></a>
+        <a className="brand" href="/" aria-label={t("home")}><span className="brand-image"><img src="/busan-full-course-logo.png" alt="부산 풀코스 · BUSAN FULL COURSE" /></span><span className="brand-partner"><span className="brand-partner-label"><small>with</small><strong>BUSAN Pay</strong></span><img src="/dongbaekjeon-bi.png" alt="부산지역화폐 동백전" width="536" height="900" /></span></a>
         <nav className="header-nav" aria-label={t("navigation")}><span className="header-tab active"><Icon name="route" size={17} />{t("plan")}</span><button type="button" onClick={() => setInfo("guide")}>{t("guide")}</button></nav>
         <select className="language-select" aria-label={t("language")} value={locale} onChange={(e) => setLocale(e.target.value)}>{Object.entries(languages).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</select>
       </header>

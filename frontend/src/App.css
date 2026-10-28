@@ -72,3 +72,11 @@ html[lang=en] .header-nav{gap:20px}
 .stop-time{display:inline-block;margin-left:7px;font-size:12px;line-height:1.6;font-weight:500;color:var(--primary);font-variant-numeric:tabular-nums}.leg-label{flex-wrap:wrap}.leg-time{font-variant-numeric:tabular-nums}
 
 .routing-estimate-note{padding:12px;border:1px solid #e7cf9f;border-radius:8px;background:#fff8e9;color:#765620;font-size:12px;line-height:1.6;margin:12px 0}
+
+.brand{gap:16px;text-decoration:none;color:var(--text);width:auto}
+.brand-partner{display:flex;align-items:center;gap:12px;padding-left:16px;border-left:1px solid var(--border);flex-shrink:0}
+.brand-partner-label{display:flex;flex-direction:column;gap:2px;line-height:1.2;white-space:nowrap}
+.brand-partner-label small{font-size:11px;font-weight:400;color:var(--text-muted)}
+.brand-partner-label strong{font-size:17px;font-weight:700;letter-spacing:-.4px}
+.brand-partner img{display:block;width:auto;height:56px;object-fit:contain;flex-shrink:0}
+@media(max-width:760px){.brand{flex:0 1 auto;width:auto;flex-direction:column;align-items:flex-start;gap:2px;padding:4px 0}.brand-image{width:150px;height:42px}.brand-partner{border:0;padding:0;gap:7px}.brand-partner-label{flex-direction:row;align-items:baseline;gap:5px}.brand-partner-label small{font-size:10px}.brand-partner-label strong{font-size:13px}.brand-partner img{height:30px}}

@@ -188,7 +188,11 @@
     "directions": "다음 장소 길찾기",
     "emailSuccess": "메일을 보냈어요",
     "spamHint": "안 보이면 스팸함도 확인해주세요",
-    "resumeChoosing": "장소 더 고르기"
+    "resumeChoosing": "장소 더 고르기",
+    "mapRegionCenter": "지도 중심의 행정구역",
+    "mapRegionLoading": "위치 확인 중…",
+    "mapRegionError": "지역정보 확인 불가",
+    "mapRegionUnknown": "행정구역 정보 없음"
   },
   "en": {
     "appTitle": "Busan walking routes",
@@ -379,7 +383,11 @@
     "directions": "Directions to next stop",
     "emailSuccess": "Your email is on its way",
     "spamHint": "Check your spam folder if it does not arrive",
-    "resumeChoosing": "Choose more places"
+    "resumeChoosing": "Choose more places",
+    "mapRegionCenter": "Administrative area at map center",
+    "mapRegionLoading": "Checking map location…",
+    "mapRegionError": "Area unavailable",
+    "mapRegionUnknown": "No administrative area"
   },
   "ja": {
     "appTitle": "釜山の徒歩コース",
@@ -570,7 +578,11 @@
     "directions": "次の場所への経路",
     "emailSuccess": "メールを送りました",
     "spamHint": "届かない場合は迷惑メールをご確認ください",
-    "resumeChoosing": "場所を追加"
+    "resumeChoosing": "場所を追加",
+    "mapRegionCenter": "地図中心の行政区域",
+    "mapRegionLoading": "位置を確認中…",
+    "mapRegionError": "地域情報を取得できません",
+    "mapRegionUnknown": "行政区域情報なし"
   },
   "zh-TW": {
     "appTitle": "釜山步行路線",
@@ -761,6 +773,10 @@
     "directions": "前往下一站",
     "emailSuccess": "郵件已寄出",
     "spamHint": "未收到時請查看垃圾郵件",
-    "resumeChoosing": "繼續選擇地點"
+    "resumeChoosing": "繼續選擇地點",
+    "mapRegionCenter": "地圖中心的行政區",
+    "mapRegionLoading": "確認地圖位置中…",
+    "mapRegionError": "無法取得地區資訊",
+    "mapRegionUnknown": "無行政區資訊"
   }
 }

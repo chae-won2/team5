@@ -1,11 +1,12 @@
-"""사용자가 출발지를 주소/장소명으로 검색할 수 있게, Kakao 키워드 검색 API를 프록시한다.
+"""출발지 키워드 검색과 지도 중심 좌표의 행정구역 조회를 프록시한다.
 프론트에 Kakao 키를 노출하지 않으려고 백엔드를 거친다."""
 
 import os
+from functools import lru_cache
 
 import requests
 from dotenv import load_dotenv
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 
 load_dotenv()
 
@@ -40,3 +41,29 @@ def search_location(query: str):
             for d in data.get("documents", [])
         ]
     }
+
+
+@lru_cache(maxsize=512)
+def lookup_region(lat: float, lon: float):
+    """Cache successful coordinate lookups; use administrative dong (H), not legal dong (B)."""
+    if not KAKAO_KEY:
+        raise HTTPException(503, "Region lookup is unavailable")
+    try:
+        response = requests.get(
+            "https://dapi.kakao.com/v2/local/geo/coord2regioncode.json",
+            params={"x": lon, "y": lat, "input_coord": "WGS84"},
+            headers={"Authorization": f"KakaoAK {KAKAO_KEY}"}, timeout=5,
+        )
+        response.raise_for_status()
+        documents = response.json()["documents"]
+        if not isinstance(documents, list):
+            raise ValueError("Invalid region response")
+        region = next((d for d in documents if d.get("region_type") == "H"), {})
+        return {"district": region.get("region_2depth_name", ""), "dong": region.get("region_3depth_name", "")}
+    except (requests.RequestException, ValueError, KeyError, TypeError, AttributeError):
+        raise HTTPException(502, "Region lookup is temporarily unavailable") from None
+
+
+@router.get("/region")
+def map_region(lat: float = Query(ge=-90, le=90), lon: float = Query(ge=-180, le=180)):
+    return lookup_region(lat, lon)

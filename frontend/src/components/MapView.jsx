@@ -1,6 +1,8 @@
+import { getMapRegion } from "../api";
+import { watchMapRegion } from "../map-region.js";
 import PlaceNameSupplement from "./PlaceNameSupplement";
 import { useI18n } from "../i18n.js";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Polyline, ZoomControl, useMap, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -42,14 +44,21 @@ function ClickHandler({ onPick }) {
   return null;
 }
 
+function RegionTracker({ onChange }) {
+  const map = useMap();
+  useEffect(() => watchMapRegion(map, getMapRegion, onChange), [map, onChange]);
+  return null;
+}
+
 export default function MapView({ candidates = [], stops, returnLeg, startPoint, onPickStart, totalMinutes, overBudget, maxMinutes }) {
   const { t, approx, minutes, locale } = useI18n();
+  const [region, setRegion] = useState({status:"loading",label:""});
   const paths = [...stops, returnLeg].filter((leg) => leg && leg.routing_source !== "estimated" && leg.leg_path?.length > 1).map((leg) => leg.leg_path);
   const progressPct = maxMinutes ? Math.min(100, Math.round((totalMinutes / maxMinutes) * 100)) : 0;
 
   return (
     <>
-      <div className="map-toolbar"><div className="map-location"><span className="map-location-icon"><Icon name="pin" size={21} /></span><div><h2>{t("busanJunggu")}</h2></div></div><span className="walking-mode"><Icon name="walk" size={17} />{t("walkingMode")}</span></div>
+      <div className="map-toolbar"><div className="map-location"><span className="map-location-icon"><Icon name="pin" size={21} /></span><div><h2 aria-live="polite" title={t("mapRegionCenter")}>{region.status === "loading" ? t("mapRegionLoading") : region.label || t(region.status === "error" ? "mapRegionError" : "mapRegionUnknown")}</h2></div></div><span className="walking-mode"><Icon name="walk" size={17} />{t("walkingMode")}</span></div>
       <MapContainer center={BUSAN_CENTER} zoom={15} className="map" zoomControl={false}>
         <TileLayer
           attribution='&copy; OpenStreetMap contributors'
@@ -58,6 +67,7 @@ export default function MapView({ candidates = [], stops, returnLeg, startPoint,
 
         <ClickHandler onPick={onPickStart} />
         <FlyToStart startPoint={startPoint} />
+        <RegionTracker onChange={setRegion} />
         <ZoomControl key={locale} position="bottomright" zoomInTitle={t("zoomIn")} zoomOutTitle={t("zoomOut")} />
 
         {paths.map((path, index) => <Polyline key={index} positions={path} color="#176b9c" weight={4} opacity={0.9} />)}

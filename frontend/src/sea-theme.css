@@ -27,3 +27,4 @@
 }
 
 .building-view .summary-bar.over{display:block}
+.map-location{min-width:0;max-width:calc(100% - 92px)}.map-location>div{min-width:0}.map-location h2{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.map-location-icon,.walking-mode{flex-shrink:0}

@@ -9,6 +9,10 @@ async function request(path, options) {
   return res.json();
 }
 
+export function getMapRegion({ lat, lon, signal }) {
+  return request(`/api/geocode/region?${new URLSearchParams({lat,lon})}`, {signal});
+}
+
 export function getCategories() {
   return request("/api/spots/categories");
 }

@@ -6,8 +6,6 @@ import Icon from "./Icon";
 
 export default function FilterPanel({
   startPoint, setStartPoint,
-  allCategories,
-  categories, toggleCategory,
   returnToStart, setReturnToStart,
   maxMinutes, setMaxMinutes,
   departureDate, setDepartureDate,
@@ -78,7 +76,6 @@ export default function FilterPanel({
           {departureDate !== busanDate() && <span>{departureDate}</span>}
           {departureTime && <span>{t("departureAt", { time: departureTime })}</span>}
           <span className="filter-summary-dot">·</span>
-          <span>{categories.length ? categories.map((category) => t(category)).join(", ") : t("all")}</span>
           <span>{returnToStart ? t("returnShort") : t("finishShort")}</span>
         </div>
         <button type="button" className="filter-edit-btn" onClick={() => setExpanded(true)}>
@@ -161,24 +158,6 @@ export default function FilterPanel({
         <div className="end-options" aria-label={t("endMode")}><button type="button" aria-pressed={!returnToStart} onClick={() => setReturnToStart(false)}>{t("finishLast")}</button><button type="button" aria-pressed={returnToStart} onClick={() => setReturnToStart(true)}>{t("returnStart")}</button></div>
         <span className="start-point-hint">{t("radiusHint")}{returnToStart && t("returnHint")}</span>
       </div>
-
-      <div className="field field-interests">
-        <div className="category-heading"><span className="field-title">{t("interests")}<small>{t("multiSelect")}</small></span></div>
-        <div className="category-grid">
-          {allCategories.map((c) => (
-            <label key={c} className="category-chip">
-              <input
-                type="checkbox"
-                checked={categories.includes(c)}
-                onChange={() => toggleCategory(c)}
-              />
-              {t(c)}
-            </label>
-          ))}
-        </div>
-        <span className="start-point-hint">{t("interestHint")}</span>
-      </div>
-
 
       <button
         className="submit-btn"

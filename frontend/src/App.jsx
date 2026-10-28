@@ -21,7 +21,6 @@ export default function App() {
   });
   const [startPoint, setStartPoint] = useState(null);
   const [allCategories, setAllCategories] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [returnToStart, setReturnToStart] = useState(false);
   const [departureDate, setDepartureDate] = useState(busanDate());
   const [departureTime, setDepartureTime] = useState("");
@@ -85,12 +84,6 @@ export default function App() {
       .finally(() => setLoading(false));
   }, []);
 
-  function toggleCategory(c) {
-    setCategories((prev) =>
-      prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]
-    );
-  }
-
   function applyRoute(data) {
     setStops(data.stops);
     setAlternatives(data.alternatives || []);
@@ -103,7 +96,7 @@ export default function App() {
 
   function handleSubmit() {
     if (!startPoint || loading) return;
-    const conditions = { startPoint, maxMinutes, returnToStart, categories: [...categories], departureDate, departureTime };
+    const conditions = { startPoint, maxMinutes, returnToStart, categories: [], departureDate, departureTime };
     setAppliedConditions(conditions);
     setScheduleStart(departureTime || busanClock());
     applyRoute({ stops: [], total_minutes: 0, over_budget: false });
@@ -111,7 +104,7 @@ export default function App() {
     setNotice(null);
     setHasSearched(true);
     setBuilding(true);
-    updateSelection([], categories[0] || allCategories[0] || null, conditions);
+    updateSelection([], allCategories[0] || null, conditions);
   }
 
   async function updateSelection(nextStops, category = null, conditions = appliedConditions) {
@@ -142,8 +135,8 @@ export default function App() {
         <select className="language-select" aria-label={t("language")} value={locale} onChange={(e) => setLocale(e.target.value)}>{Object.entries(languages).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</select>
       </header>
       <svg className="wave-divider" viewBox="0 0 1200 14" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 6 C100 0 200 0 300 6 S500 12 600 6 S800 0 900 6 S1100 12 1200 6" stroke="#176b9c" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
-        <path d="M0 10 C100 4 200 4 300 10 S500 16 600 10 S800 4 900 10 S1100 16 1200 10" stroke="#ffd988" strokeWidth="1.5" fill="none" vectorEffect="non-scaling-stroke" />
+        <path d="M0 6 C100 0 200 0 300 6 S500 12 600 6 S800 0 900 6 S1100 12 1200 6" stroke="#8CCBEA" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
+        <path d="M0 10 C100 4 200 4 300 10 S500 16 600 10 S800 4 900 10 S1100 16 1200 10" stroke="#FFE08A" strokeWidth="1.5" fill="none" vectorEffect="non-scaling-stroke" />
       </svg>
 
       <ol className="planner-steps" aria-label={t("plan")}>{["stepSetup","stepPlaces","stepFinish"].map((key,i) => <li key={key} aria-current={(!hasSearched ? i===0 : building ? i===1 : i===2) ? "step" : undefined}><span>{i+1}</span>{t(key)}</li>)}</ol>
@@ -153,8 +146,6 @@ export default function App() {
             <section className="planner-intro" id="trip-planner"><h1>{t("appTitle")}</h1><p>{t("intro")}</p></section>
             <FilterPanel
               startPoint={startPoint} setStartPoint={setStartPoint}
-              allCategories={allCategories}
-              categories={categories} toggleCategory={toggleCategory}
               returnToStart={returnToStart} setReturnToStart={setReturnToStart}
               maxMinutes={maxMinutes} setMaxMinutes={setMaxMinutes}
               departureDate={departureDate} setDepartureDate={setDepartureDate}
@@ -175,8 +166,7 @@ export default function App() {
               onRemoveStop={(index) => updateSelection(stops.filter((_, i) => i !== index))}
             />
               {hasSearched && (building ? <NextPlacePicker
-                categories={appliedConditions.categories.length ? appliedConditions.categories : allCategories}
-                selectedCategories={appliedConditions.categories}
+                categories={allCategories}
                 activeCategory={activeCategory} candidates={alternatives} busy={loading}
                 recommendationId={recommendationId}
                 maxMinutes={appliedConditions.maxMinutes}

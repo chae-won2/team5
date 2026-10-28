@@ -7,6 +7,8 @@ import smtplib
 
 import requests
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from datetime import date
 from typing import List, Literal, Optional
 from urllib.parse import urlencode
 
@@ -44,6 +46,7 @@ class EmailRequest(BaseModel):
     language: Literal["ko", "en", "ja", "zh-TW"] = "ko"
     email: str
     email_consent: bool = False
+    departure_date: Optional[date] = None
     return_to_start: bool = False
     departure_time: Optional[str] = Field(default=None, min_length=5, max_length=5, pattern=r"^(?:[01][0-9]|2[0-3]):[0-5][0-9]$")
     return_minutes: Optional[float] = Field(default=None, ge=0, allow_inf_nan=False)
@@ -64,6 +67,8 @@ def build_course_link(req: EmailRequest) -> Optional[str]:
               "minutes": req.max_minutes, "return": "1" if req.return_to_start else "0", "lang": req.language}
     if req.departure_time:
         params["depart"] = req.departure_time
+    if req.departure_date:
+        params["date"] = req.departure_date.isoformat()
     if req.start_label:
         params["label"] = req.start_label
     site = os.environ.get("PUBLIC_SITE_URL", "https://busan-full-course.onrender.com").rstrip("/")
@@ -149,6 +154,11 @@ def build_email_body(req: EmailRequest) -> str:
     return "\n".join(lines)
 
 
+def build_email_html(req: EmailRequest) -> str:
+    from app.services.email_cards import render_email
+    return render_email(req)
+
+
 @router.post("/email")
 def send_route_email(req: EmailRequest):
     if not req.email_consent:
@@ -167,7 +177,8 @@ def send_route_email(req: EmailRequest):
                 json={"sender": {"email": sender, "name": "Busan Full Course"},
                       "to": [{"email": req.email}],
                       "subject": EMAIL_COPY[req.language]["subject"],
-                      "textContent": build_email_body(req)},
+                      "textContent": build_email_body(req),
+                      "htmlContent": build_email_html(req)},
                 timeout=15,
             )
             response.raise_for_status()
@@ -182,7 +193,9 @@ def send_route_email(req: EmailRequest):
         logger.info("Email sending is not configured; request skipped")
         return {"ok": True, "sent": False, "reason": "gmail credentials not configured yet"}
 
-    msg = MIMEText(build_email_body(req))
+    msg = MIMEMultipart("alternative")
+    msg.attach(MIMEText(build_email_body(req), "plain", "utf-8"))
+    msg.attach(MIMEText(build_email_html(req), "html", "utf-8"))
     msg["Subject"] = EMAIL_COPY[req.language]["subject"]
     msg["From"] = GMAIL_ADDRESS
     msg["To"] = req.email

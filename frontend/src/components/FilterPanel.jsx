@@ -1,7 +1,7 @@
 import { useI18n } from "../i18n.js";
 import { useState } from "react";
 import { searchLocation } from "../api";
-import { busanDate } from "../schedule.js";
+import { busanDate, busanClock } from "../schedule.js";
 import Icon from "./Icon";
 
 export default function FilterPanel({
@@ -21,8 +21,10 @@ export default function FilterPanel({
   const [searchError, setSearchError] = useState(null);
   const [locating, setLocating] = useState(false);
   const [expanded, setExpanded] = useState(true);
+  const [departureMode, setDepartureMode] = useState(departureTime ? "date" : "now");
 
 
+  const mode = departureMode === "now" && (departureTime || departureDate !== busanDate()) ? "date" : departureMode;
   const canSubmit = !!startPoint && !loading;
 
   async function handleSearch(e) {
@@ -89,7 +91,7 @@ export default function FilterPanel({
   return (
     <div className="filter-panel">
       <div className="panel-heading"><h2>{t("tripSettings")}</h2></div>
-      <div className="field">
+      <div className="field field-start">
         <span className="field-title"><Icon name="pin" size={16} />{t("start")}</span>
 
         {startPoint ? (
@@ -132,26 +134,20 @@ export default function FilterPanel({
         )}
       </div>
 
-      <div className="field"><span className="field-title">{t("endMode")}</span>
-        <select aria-label={t("endMode")} value={returnToStart ? "return" : "end"} onChange={(e) => setReturnToStart(e.target.value === "return")}>
-          <option value="end">{t("finishLast")}</option><option value="return">{t("returnStart")}</option>
-        </select>
-        <span className="start-point-hint">{t("radiusHint")}{returnToStart && t("returnHint")}</span>
-      </div>
-
-      <div className="field">
+      <div className="field departure-modes"><span className="field-title">{t("departureTime")}</span><div className="departure-options">{["now","today","date"].map(option => <button key={option} type="button" aria-pressed={mode===option} onClick={() => { setDepartureMode(option); if(option!=="date") setDepartureDate(busanDate()); setDepartureTime(option==="now" ? "" : departureTime || busanClock()); }}>{t({now:"departNow",today:"departToday",date:"departDate"}[option])}</button>)}</div></div>
+      {mode === "date" && <div className="field field-date">
         <label className="field-title" htmlFor="departure-date">{t("departureDate")}</label>
         <div className="departure-time-row"><input id="departure-date" type="date" min={busanDate()} value={departureDate} onChange={(e) => setDepartureDate(e.target.value)} /></div>
         <span className="start-point-hint">{t("departureDateHint")}</span>
-      </div>
+      </div>}
 
-      <div className="field">
+      {mode !== "now" && <div className="field field-time">
         <label className="field-title" htmlFor="departure-time">{t("departureTime")}</label>
         <div className="departure-time-row"><input id="departure-time" type="time" step="60" value={departureTime} onChange={(e) => setDepartureTime(e.target.value)} />{departureTime && <button type="button" className="filter-edit-btn" onClick={() => setDepartureTime("")}>{t("automaticDeparture")}</button>}</div>
         <span className="start-point-hint">{t("departureHint")}</span>
-      </div>
+      </div>}
 
-      <label className="field">
+      <label className="field field-budget">
         <span className="field-title"><Icon name="clock" size={16} />{t("tripTime")}<b className="time-value">{minutes(maxMinutes)}</b></span>
         <input
           aria-label={t("tripTime")} type="range" min={30} max={360} step={10} aria-valuetext={minutes(maxMinutes)} value={maxMinutes}
@@ -161,7 +157,12 @@ export default function FilterPanel({
         <span className="start-point-hint">{t("budgetHint")}</span>
       </label>
 
-      <div className="field">
+      <div className="field field-end"><span className="field-title">{t("endMode")}</span>
+        <div className="end-options" aria-label={t("endMode")}><button type="button" aria-pressed={!returnToStart} onClick={() => setReturnToStart(false)}>{t("finishLast")}</button><button type="button" aria-pressed={returnToStart} onClick={() => setReturnToStart(true)}>{t("returnStart")}</button></div>
+        <span className="start-point-hint">{t("radiusHint")}{returnToStart && t("returnHint")}</span>
+      </div>
+
+      <div className="field field-interests">
         <div className="category-heading"><span className="field-title">{t("interests")}<small>{t("multiSelect")}</small></span></div>
         <div className="category-grid">
           {allCategories.map((c) => (

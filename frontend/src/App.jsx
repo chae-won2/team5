@@ -7,12 +7,18 @@ import RouteList from "./components/RouteList";
 import NextPlacePicker from "./components/NextPlacePicker";
 import { getCategories, getNextPlaces } from "./api";
 import "./App.css";
+import "./sea-theme.css";
+import WelcomeDialog from "./components/WelcomeDialog";
 import Icon from "./components/Icon";
 import ServiceInfo from "./components/ServiceInfo";
 
 export default function App() {
   const { locale, setLocale, languages, t, message } = useI18n();
   const [info, setInfo] = useState(null);
+  const [welcome, setWelcome] = useState(() => {
+    if (new URLSearchParams(window.location.search).has("stop")) return false;
+    try { return localStorage.getItem("busan-welcome-hidden") !== "1"; } catch { return true; }
+  });
   const [startPoint, setStartPoint] = useState(null);
   const [allCategories, setAllCategories] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -128,7 +134,7 @@ export default function App() {
   const phase = loading && !hasSearched ? "loading" : hasSearched ? "result" : "setup";
 
   return (
-    <div className="app">
+    <div className={`app phase-${hasSearched ? building ? "choosing" : "complete" : "setup"}`}>
       <header className="app-header">
         <a className="brand" href="/" aria-label={t("home")}><span className="brand-image"><img src="/busan-full-course-logo.png" alt="부산 풀코스 · BUSAN FULL COURSE" /></span></a>
         <nav className="header-nav" aria-label={t("navigation")}><span className="header-tab active"><Icon name="route" size={17} />{t("plan")}</span><button type="button" onClick={() => setInfo("guide")}>{t("guide")}</button></nav>
@@ -136,6 +142,7 @@ export default function App() {
         <select className="language-select" aria-label={t("language")} value={locale} onChange={(e) => setLocale(e.target.value)}>{Object.entries(languages).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</select>
       </header>
 
+      <ol className="planner-steps" aria-label={t("plan")}>{["stepSetup","stepPlaces","stepFinish"].map((key,i) => <li key={key} aria-current={(!hasSearched ? i===0 : building ? i===1 : i===2) ? "step" : undefined}><span>{i+1}</span>{t(key)}</li>)}</ol>
       <div className="app-body">
         <aside className="sidebar">
           <div className="sidebar-scroll">
@@ -158,7 +165,7 @@ export default function App() {
               stops={stops} alternatives={alternatives}
               totalMinutes={totalMinutes} overBudget={overBudget}
               maxMinutes={appliedConditions?.maxMinutes || maxMinutes}
-              scheduleStart={scheduleStart} automaticStart={!appliedConditions?.departureTime}
+              scheduleStart={scheduleStart} departureDate={appliedConditions?.departureDate || departureDate} automaticStart={!appliedConditions?.departureTime}
               phase={phase} startPoint={appliedConditions?.startPoint || startPoint} returnLeg={returnLeg}
               building={building} busy={loading}
               onRemoveStop={(index) => updateSelection(stops.filter((_, i) => i !== index))}
@@ -179,12 +186,13 @@ export default function App() {
         </aside>
         <main className="map-area">
           <MapView
-            stops={stops} returnLeg={returnLeg} startPoint={hasSearched ? appliedConditions?.startPoint : startPoint} onPickStart={(point) => { if (!hasSearched) setStartPoint(point); }}
+            candidates={building ? alternatives : []} stops={stops} returnLeg={returnLeg} startPoint={hasSearched ? appliedConditions?.startPoint : startPoint} onPickStart={(point) => { if (!hasSearched) setStartPoint(point); }}
             totalMinutes={totalMinutes} overBudget={overBudget} maxMinutes={appliedConditions?.maxMinutes || maxMinutes}
           />
         </main>
       </div>
       <footer className="app-footer"><span>© BUSAN FULL COURSE <span className="footer-divider">|</span> {t("footer")}</span><div><button type="button" onClick={() => setInfo("guide")}>{t("guide")}</button><button type="button" onClick={() => setInfo("privacy")}>{t("privacy")}</button></div></footer>
+      {welcome && <WelcomeDialog onClose={() => setWelcome(false)} />}
       {info && <ServiceInfo section={info} onClose={() => setInfo(null)} />}
     </div>
   );

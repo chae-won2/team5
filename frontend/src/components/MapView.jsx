@@ -42,7 +42,7 @@ function ClickHandler({ onPick }) {
   return null;
 }
 
-export default function MapView({ stops, returnLeg, startPoint, onPickStart, totalMinutes, overBudget, maxMinutes }) {
+export default function MapView({ candidates = [], stops, returnLeg, startPoint, onPickStart, totalMinutes, overBudget, maxMinutes }) {
   const { t, approx, minutes, locale } = useI18n();
   const paths = [...stops, returnLeg].filter((leg) => leg && leg.routing_source !== "estimated" && leg.leg_path?.length > 1).map((leg) => leg.leg_path);
   const progressPct = maxMinutes ? Math.min(100, Math.round((totalMinutes / maxMinutes) * 100)) : 0;
@@ -60,7 +60,7 @@ export default function MapView({ stops, returnLeg, startPoint, onPickStart, tot
         <FlyToStart startPoint={startPoint} />
         <ZoomControl key={locale} position="bottomright" zoomInTitle={t("zoomIn")} zoomOutTitle={t("zoomOut")} />
 
-        {paths.map((path, index) => <Polyline key={index} positions={path} color="#0d9488" weight={4} opacity={0.9} />)}
+        {paths.map((path, index) => <Polyline key={index} positions={path} color="#176b9c" weight={4} opacity={0.9} />)}
 
         {startPoint && (
           <Marker position={[startPoint.lat, startPoint.lon]} icon={startIcon}>
@@ -68,6 +68,7 @@ export default function MapView({ stops, returnLeg, startPoint, onPickStart, tot
           </Marker>
         )}
 
+        {candidates.map((place) => <Marker key={`candidate-${place.id}`} position={[place.lat,place.lon]} icon={L.divIcon({className:"candidate-marker",html:'<div class="candidate-marker-inner">'+(place.payment_status === "merchant_listed" ? "₩" : "•")+'</div>',iconSize:[26,32],iconAnchor:[13,32]})}><Popup><strong>{place.name}</strong><br/>{t(place.category)} · {place.address}</Popup></Marker>)}
         {stops.map((stop) => (
           <Marker key={stop.id} position={[stop.lat, stop.lon]} icon={numberedIcon(stop.order)}>
             <Popup>

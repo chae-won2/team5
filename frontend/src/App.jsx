@@ -141,6 +141,10 @@ export default function App() {
         <span className="partner-badge"><small>{t("partnerBadge")}</small><img src="/busan-pay-logo.png" alt="BUSAN Pay" /></span>
         <select className="language-select" aria-label={t("language")} value={locale} onChange={(e) => setLocale(e.target.value)}>{Object.entries(languages).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</select>
       </header>
+      <svg className="wave-divider" viewBox="0 0 1200 14" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 6 C100 0 200 0 300 6 S500 12 600 6 S800 0 900 6 S1100 12 1200 6" stroke="#176b9c" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
+        <path d="M0 10 C100 4 200 4 300 10 S500 16 600 10 S800 4 900 10 S1100 16 1200 10" stroke="#ffd988" strokeWidth="1.5" fill="none" vectorEffect="non-scaling-stroke" />
+      </svg>
 
       <ol className="planner-steps" aria-label={t("plan")}>{["stepSetup","stepPlaces","stepFinish"].map((key,i) => <li key={key} aria-current={(!hasSearched ? i===0 : building ? i===1 : i===2) ? "step" : undefined}><span>{i+1}</span>{t(key)}</li>)}</ol>
       <div className="app-body">

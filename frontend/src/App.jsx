@@ -134,9 +134,9 @@ export default function App() {
         <span className="partner-badge"><small>{t("partnerBadge")}</small><img src="/busan-pay-logo.png" alt="BUSAN Pay" /></span>
         <select className="language-select" aria-label={t("language")} value={locale} onChange={(e) => setLocale(e.target.value)}>{Object.entries(languages).map(([code, label]) => <option key={code} value={code}>{label}</option>)}</select>
       </header>
-      <svg className="wave-divider" viewBox="0 0 1200 14" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 6 C100 0 200 0 300 6 S500 12 600 6 S800 0 900 6 S1100 12 1200 6" stroke="#8CCBEA" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
-        <path d="M0 10 C100 4 200 4 300 10 S500 16 600 10 S800 4 900 10 S1100 16 1200 10" stroke="#FFE08A" strokeWidth="1.5" fill="none" vectorEffect="non-scaling-stroke" />
+      <svg className="wave-divider" viewBox="0 0 1200 24" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 10 C50 0 100 0 150 10 S250 20 300 10 S400 0 450 10 S550 20 600 10 S700 0 750 10 S850 20 900 10 S1000 0 1050 10 S1150 20 1200 10" stroke="#8CCBEA" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
+        <path d="M0 14 C50 6 100 6 150 14 S250 22 300 14 S400 6 450 14 S550 22 600 14 S700 6 750 14 S850 22 900 14 S1000 6 1050 14 S1150 22 1200 14" stroke="#FFE08A" strokeWidth="1.5" fill="none" vectorEffect="non-scaling-stroke" />
       </svg>
 
       <ol className="planner-steps" aria-label={t("plan")}>{["stepSetup","stepPlaces","stepFinish"].map((key,i) => <li key={key} aria-current={(!hasSearched ? i===0 : building ? i===1 : i===2) ? "step" : undefined}><span>{i+1}</span>{t(key)}</li>)}</ol>

@@ -1,4 +1,3 @@
-import { courseLink } from "../course-link.js";
 import AdmissionFee from "./AdmissionFee";
 import PlaceNameSupplement from "./PlaceNameSupplement";
 import { buildSchedule, formatScheduleRange } from "../schedule.js";
@@ -34,7 +33,6 @@ function EmailModal({ onClose, onSend, sending, sendResult, summary }) {
 
 export default function RouteList({ stops, totalMinutes, maxMinutes, overBudget, phase, startPoint, returnLeg, building, busy, onRemoveStop, scheduleStart, departureDate, automaticStart }) {
   const { t, approx, walkTime, stayTime, placeLabel, locale } = useI18n();
-  const [shareStatus, setShareStatus] = useState(null);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendResult, setSendResult] = useState(null);
@@ -56,12 +54,6 @@ export default function RouteList({ stops, totalMinutes, maxMinutes, overBudget,
   const timeRange = (range) => formatScheduleRange(locale, range);
   const knownPrices = stops.filter(s => ["식당","카페·디저트","카페/디저트"].includes(s.category) && Number.isFinite(s.estimated_spend));
   const knownSpend = knownPrices.reduce((sum,s)=>sum+s.estimated_spend,0);
-  async function share() {
-    const link=courseLink({stops,startPoint,maxMinutes,returnLeg,locale,scheduleStart,departureDate});
-    window.history.replaceState(null,"",link);
-    try { await navigator.clipboard.writeText(link); setShareStatus("copiedCourse"); } catch { setShareStatus("copyFailed"); }
-  }
-  const directions="https://www.google.com/maps/dir/?"+new URLSearchParams({api:"1",destination:stops[0].address+" "+stops[0].name,travelmode:"walking"});
   return <section className={building ? "route-list building-view" : "route-list"} aria-label={t("results")}>
     {!building ? <><div className="completion-heading"><span className="completion-icon"><Icon name="check" size={25}/></span><div><small>{t("courseComplete")}</small><h2>{t("appTitle")}</h2></div></div><div className="course-stats"><div><strong>{t("placeCount",{count:stops.length})}</strong><small>{t("results")}</small></div><div><strong>{approx(totalMinutes)}</strong><small>{schedule ? timeRange({start:schedule.visits[0].walk.start,end:(schedule.returnWalk || schedule.visits.at(-1).stay).end}) : t("estimatedTotal")}</small></div><div><strong>{knownPrices.length ? `₩${knownSpend.toLocaleString()}` : t("priceUnknown")}</strong><small>{t("estimatedSpendLabel")}</small><small>{knownPrices.length ? t("knownSpend") : ""}</small></div></div></> : <div className="panel-heading"><h2>{t("results")}</h2><span>{t("placeCount", { count: stops.length })}</span></div>}
     <div className={overBudget ? "summary-bar over" : "summary-bar"}><div><span>{t("estimatedTotal")}</span><strong>{approx(totalMinutes)}</strong></div><p>{walkTime(walk)} + {stayTime(stay)}</p>{overBudget && <span className="over-badge" role="status">{t("timeOverrun", { limit: approx(maxMinutes), extra: approx(Math.round((totalMinutes - maxMinutes) * 10) / 10) })}</span>}</div>
@@ -77,7 +69,6 @@ export default function RouteList({ stops, totalMinutes, maxMinutes, overBudget,
     })}</div></details>
     {returnLeg && <div className="return-stop"><Icon name="pin" size={17} /><div><strong>{t("returnStart")}</strong><p>{placeLabel(startPoint)} · {walkTime(returnLeg.leg_minutes)}{schedule && <span className="leg-time"> ({timeRange(schedule.returnWalk)})</span>}</p></div></div>}
     {!building && <button type="button" className="submit-btn email-cta" onClick={() => { setSendResult(null); setShowEmailModal(true); }}><Icon name="mail" size={18} />{t("emailCTA")}<Icon name="arrow" size={18} /></button>}
-    {!building && <><div className="course-actions"><a href={directions} target="_blank" rel="noreferrer"><Icon name="pin" size={15}/>{t("directions")}</a><button type="button" onClick={share}><Icon name="route" size={15}/>{t("shareCourse")}</button></div>{shareStatus && <p className="source-note" role="status">{t(shareStatus)}</p>}</>}
     <p className="source-note">{t("sourceNote")}</p>
     {showEmailModal && <EmailModal summary={`${t("placeCount",{count:stops.length})} · ${approx(totalMinutes)}`} onClose={() => { if (!sending) setShowEmailModal(false); }} onSend={handleSendEmail} sending={sending} sendResult={sendResult} />}
   </section>;

@@ -46,7 +46,7 @@ button,input{font-family:inherit}button:focus-visible,a:focus-visible,input:focu
 .place-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}.place-tags:empty{display:none}.payment-tag{display:inline-block;font-size:11px;color:#176047;font-weight:750;line-height:1.8}.taste-tag{display:inline-block;font-size:11px;color:#a65b22;font-weight:750;line-height:1.8}.open-tag{display:inline-block;font-size:11px;color:#176047;font-weight:750;line-height:1.8}.closed-tag{display:inline-block;font-size:11px;color:#b3261e;font-weight:750;line-height:1.8}.candidate-tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:4px}.candidate-tags .payment-tag,.candidate-tags .taste-tag,.candidate-tags .open-tag,.candidate-tags .closed-tag{font-size:9px}
 .summary-bar strong .approx-label{font-size:13px;color:inherit;font-weight:500}
 
-.language-select{margin-left:auto;max-width:155px;border:1px solid var(--border);border-radius:8px;background:#fff;padding:9px 10px;color:var(--text);font:inherit;font-size:12px}
+.language-select{max-width:155px;border:1px solid var(--border);border-radius:8px;background:#fff;padding:9px 10px;color:var(--text);font:inherit;font-size:12px}
 html[lang=en] .category-chip{font-size:9px;white-space:normal;display:grid;place-items:center;min-height:36px;line-height:1.3}
 html[lang=en] .summary-bar strong{font-size:20px;letter-spacing:-.4px}
 html[lang=en] .header-nav{gap:20px}
@@ -74,7 +74,7 @@ html[lang=en] .header-nav{gap:20px}
 .routing-estimate-note{padding:12px;border:1px solid #e7cf9f;border-radius:8px;background:#fff8e9;color:#765620;font-size:12px;line-height:1.6;margin:12px 0}
 
 .brand{gap:16px;text-decoration:none;color:var(--text);width:auto}
-.brand-partner{display:flex;align-items:center;gap:10px;padding-left:16px;border-left:1px solid var(--border);flex-shrink:0}
-.brand-partner small{font-size:11px;font-weight:400;color:var(--text-muted)}
-.brand-partner img{display:block;width:145px;height:auto;object-fit:contain;flex-shrink:0}
-@media(max-width:760px){.brand{flex:0 1 auto;width:auto;flex-direction:column;align-items:flex-start;gap:3px;padding:4px 0}.brand-image{width:150px;height:42px}.brand-partner{border:0;padding:0;gap:7px}.brand-partner small{font-size:10px}.brand-partner img{width:115px;height:auto}}
+.partner-badge{display:inline-flex;align-items:center;gap:9px;margin-left:auto;flex-shrink:0;border:1px solid var(--border);border-radius:999px;background:#fafcfb;padding:6px 14px 6px 12px}
+.partner-badge small{font-size:10px;font-weight:600;letter-spacing:.02em;color:var(--text-muted);white-space:nowrap}
+.partner-badge img{display:block;height:16px;width:auto;object-fit:contain;flex-shrink:0}
+@media(max-width:760px){.brand{flex:0 1 auto;width:auto;padding:4px 0}.brand-image{width:150px;height:42px}.partner-badge{padding:4px 9px}.partner-badge small{display:none}.partner-badge img{height:13px}}
